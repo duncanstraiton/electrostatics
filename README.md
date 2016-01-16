@@ -20,20 +20,27 @@ The src folder is for all c++ source files. These should all have the file exten
 
 ### Compiling and Running
 
-To compile and run the program you must have g++, make and eigen installed. Eigen is the library used to provide matrices.
+To compile and run the program you must have g++, make and eigen installed. Eigen is the library used to provide matrices. To compile the unit tests you must install the Google Test framework. The installation commands below should work on Debian based linux distributions such as Ubuntu, Mint etc.
 
 ##### Installing g++ and make
-On a Debian based system run:
 ```bash
 sudo apt-get install g++ make
 ```
 
 ##### Installing Eigen
 ```bash
-wget http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz -O eigen.tar.gz
-tar zxpf eigen.tar.gz
-sudo mv eigen-eigen-b30b87236a1b /usr/local/include/eigen
+sudo apt-get install libeigen3-dev
 ```
+
+##### Installing Google Test
+```
+sudo apt-get install cmake libgtest-dev
+cd /usr/src/gtest
+sudo cmake CMakeLists.txt
+sudo make
+sudo cp *.a /usr/lib
+```
+
 
 ##### Compiling
 In the root directory of the project run make. This will generate the object files in the build directory, and the output executable in the bin directory
