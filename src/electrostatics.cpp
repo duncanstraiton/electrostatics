@@ -26,7 +26,7 @@ int main() {
     int v1 = 5;      // Voltage at left hand plate
     int v2 = 0;      // Voltage of circle in middle
     int v3 = -5;     // Voltage of right hand plate
-    int radius = 10; // Radius of the circle
+    int radius = 25; // Radius of the circle
 
     // Set points as required
     for(int i=iMin; i<=iMax; i++) {
