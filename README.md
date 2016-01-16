@@ -63,6 +63,7 @@ make
 ```
 
 ##### Running the Program
+This currently does not do anything as it hasn't been implemented yet.
 ```bash
 bin/electrostatics
 ```
