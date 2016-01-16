@@ -16,6 +16,11 @@ class ElectrostaticSystemTest : public ::testing::Test {
         }
 };
 
+TEST_F(ElectrostaticSystemTest, getDimensions) {
+    ASSERT_EQ(21, system->getLengthI());
+    ASSERT_EQ(15, system->getLengthJ());
+}
+
 TEST_F(ElectrostaticSystemTest, BoundaryChecks) {
     ASSERT_THROW(system->getPotentialIJ(-19, 0), std::out_of_range);
     ASSERT_THROW(system->getPotentialK(30000), std::out_of_range);
