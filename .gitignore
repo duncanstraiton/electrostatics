@@ -1,6 +1,8 @@
 DS_Store
 /build/
 /bin/
+/test/build/
+/test/bin/
 *~
 ._*
 *.swp
