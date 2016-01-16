@@ -3,7 +3,7 @@
 Third year Theoretical Physics group project to solve electrostatics problems.
 
 
-### Document Structure
+### Folder Structure
 
 ##### bin
 The bin directory is where the output executables are stored. It is listed in .gitignore so that it is not included in the git repository. (You generate it along with the compiled executables by running make.)
@@ -16,6 +16,10 @@ All header files should be in the include folder.
 
 ##### src
 The src folder is for all c++ source files. These should all have the file extension .cpp (so that that make can find them).
+
+##### test
+Contains a src folder which contains the tests for the program. Running make testAll also generates a build and bin directory here, with the test executable in the test/bin directory.
+
 
 
 ### Compiling and Running
@@ -41,6 +45,16 @@ sudo make
 sudo cp *.a /usr/lib
 ```
 
+##### Compiling and running the tests
+With google test installed as directed above the tests can be compiled by running
+```bash
+make testAll
+```
+in the project root directory. This also compiles any other source files required for running the tests.
+The tests can then be executed by running
+```bash
+test/bin/testAll
+```
 
 ##### Compiling
 In the root directory of the project run make. This will generate the object files in the build directory, and the output executable in the bin directory
