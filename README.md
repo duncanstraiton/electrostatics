@@ -20,6 +20,9 @@ The src folder is for all c++ source files. These should all have the file exten
 ##### test
 Contains a src folder which contains the tests for the program. Running make testAll also generates a build and bin directory here, with the test executable in the test/bin directory.
 
+##### scripts
+Contains useful scripts eg to plot data with gnuplot.
+
 
 
 ### Compiling and Running
@@ -63,7 +66,11 @@ make
 ```
 
 ##### Running the Program
-This currently does not do anything as it hasn't been implemented yet.
+The main funtion of the program currently solves the second problem in the project description document. To run the porgram and plot the output do the following:
 ```bash
-bin/electrostatics
+cd bin
+./electrostatics > electrostatics.out
+gnuplot ../scripts/plot.plt
 ```
+
+This will generate the plot as an eps file called plot that can then be opened with a program like gv. You will need gnuplot installed to generate the plot.
