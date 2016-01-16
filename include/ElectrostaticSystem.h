@@ -54,8 +54,8 @@ class ElectrostaticSystem {
         long getKMax() const { return kMax; }
 
         /* Get the length of the system in i or j direction. Counts from 1. */
-        int getLengthI() { return potentials.rows(); }
-        int getLengthJ() { return potentials.cols(); }
+        int getLengthI() const { return potentials.rows(); }
+        int getLengthJ() const { return potentials.cols(); }
 
 
         /* Get the potential at position (i, j) or (k).*/
