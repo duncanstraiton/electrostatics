@@ -1,5 +1,5 @@
 /**
- * A class to represent an unsolved electrostatic potentials.
+ * A class to represent an unsolved electrostatic system.
  *
  * Inherits from ElectrostaticSystem, adding a matrix (from eigen, dense) to
  * specify which points of the grid are boundary conditions and which are 
