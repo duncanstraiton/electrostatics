@@ -39,9 +39,6 @@ class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
                 Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> &boundaryConditionPositions,
                 int iMin, int jMin);
 
-
-        /* Get the boundaryConditionPositions matrix. */
-        Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>* getBoundaryConditionPositions();
         
         /* Test if position (i, j) or (k) is a boundary condition. */
         bool isBoundaryConditionIJ(int i, int j) const;

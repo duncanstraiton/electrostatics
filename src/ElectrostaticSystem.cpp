@@ -45,8 +45,6 @@ void ElectrostaticSystem::setPotentialK(long k, double potential) {
     potentials(ij[0]-iMin, ij[1]-jMin) = potential;
 }
 
-Eigen::MatrixXd* ElectrostaticSystem::getPotentials() { return &potentials; }
-
 long ElectrostaticSystem::ij2k(int i, int j) const {
     if(i>iMax || i<iMin || j>jMax || j<jMin) throw std::out_of_range(
             "Error: Trying to convert to position (k) out of range!");

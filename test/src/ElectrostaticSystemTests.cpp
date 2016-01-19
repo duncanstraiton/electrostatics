@@ -69,23 +69,6 @@ TEST_F(ElectrostaticSystemTest, SetAndGetPotential2) {
     ASSERT_EQ(potential, system->getPotentialIJ(ij[0], ij[1]));
 }
 
-TEST_F(ElectrostaticSystemTest, GetPotentials) {
-    system->setPotentialIJ(2, 6, 198.2);
-    system->setPotentialIJ(-10, -7, 78.2);
-    Eigen::MatrixXd* potentialsMatrix = system->getPotentials();
-    // Position in potentialsMatrix is (i-iMin, j-jMin)
-    ASSERT_EQ(198.2, (*potentialsMatrix)(20, 14));
-    ASSERT_EQ(78.2, (*potentialsMatrix)(8, 1));
-    ASSERT_EQ(21, potentialsMatrix->rows());
-    ASSERT_EQ(15, potentialsMatrix->cols());
-}
-
-TEST_F(ElectrostaticSystemTest, InitiallyZeroed) {
-    Eigen::MatrixXd* potentialsMatrix = system->getPotentials();
-    ASSERT_EQ(0, potentialsMatrix->sum());
-    ASSERT_EQ(0, potentialsMatrix->maxCoeff());
-}
-
 TEST(ElectrostaticSystemTestMatrixConstructor, MatrixConstructor) {
     int iMin = -3;
     int jMin = 4;

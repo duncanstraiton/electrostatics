@@ -28,13 +28,6 @@ TEST_F(UnsolvedElectrostaticSystemTest, BoundaryChecks) {
     ASSERT_NO_THROW(system->setBoundaryConditionK(0, true));
 }
 
-TEST_F(UnsolvedElectrostaticSystemTest, BoundaryInitiallyFalse) {
-    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>*
-        boundaryConditionPositionsMatrix = system->getBoundaryConditionPositions();
-    ASSERT_EQ(false, boundaryConditionPositionsMatrix->sum());
-    ASSERT_EQ(false, boundaryConditionPositionsMatrix->maxCoeff());
-}
-
 TEST_F(UnsolvedElectrostaticSystemTest, IsAndSetBoundary1) {
     system->setBoundaryConditionIJ(1, 5, true);
     ASSERT_EQ(true, system->isBoundaryConditionK(system->ij2k(1, 5)));
@@ -48,18 +41,6 @@ TEST_F(UnsolvedElectrostaticSystemTest, IsAndSetBoundary2) {
     ASSERT_EQ(false, system->isBoundaryConditionK(10));
 }
 
-TEST_F(UnsolvedElectrostaticSystemTest, GetBoundaryConditionPositions) {
-    system->setBoundaryConditionIJ(2, 6, true);
-    system->setBoundaryConditionIJ(-10, -7, true);
-    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>* boundaryConditionPositionsMatrix =
-        system->getBoundaryConditionPositions();
-    // Position in boundaryConditionPositionsMatrix is (i-iMin, j-jMin)
-    ASSERT_EQ(true, (*boundaryConditionPositionsMatrix)(20, 14));
-    ASSERT_EQ(true, (*boundaryConditionPositionsMatrix)(8, 1));
-    ASSERT_EQ(false, (*boundaryConditionPositionsMatrix)(7, 14));
-    ASSERT_EQ(21, (*boundaryConditionPositionsMatrix).rows());
-    ASSERT_EQ(15, (*boundaryConditionPositionsMatrix).cols());
-}
 
 TEST(UnsolvedElectrostaticSystemTestMatrixConstructor, MatrixConstructor) {
     int iMin = -3;

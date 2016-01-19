@@ -25,10 +25,6 @@ UnsolvedElectrostaticSystem::UnsolvedElectrostaticSystem(int iMin, int iMax, int
 
 /* Methods */
 
-Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>* UnsolvedElectrostaticSystem::getBoundaryConditionPositions() {
-    return &boundaryConditionPositions;
-}
-
 bool UnsolvedElectrostaticSystem::isBoundaryConditionIJ(int i, int j) const {
     if(i>iMax || i<iMin || j>jMax || j<jMin) throw std::out_of_range("Error: Trying to get element out of range!");
     return boundaryConditionPositions(i-iMin, j-jMin);

@@ -67,9 +67,6 @@ class ElectrostaticSystem {
         void setPotentialIJ(int i, int j, double potential);
         void setPotentialK(long k, double potential);
 
-        /* Get the potential matrix. */
-        Eigen::MatrixXd* getPotentials();
-
         /* Convert between (i, j) coordinates and (k) positions. */
         long ij2k(int i, int j) const;
         int* k2ij(long k) const;
