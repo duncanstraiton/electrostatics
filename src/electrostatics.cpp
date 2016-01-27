@@ -152,9 +152,9 @@ void solveProblem2() {
     // Setup the unsolved system with the boundary conditions, and then solve it
     electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
     unsolvedSystem.setBoundaryCircle(0, 0, cylinderRadius, cylinderPotential);
-    for(int i=iMin; i<=iMax; i++) {
-        unsolvedSystem.setBoundaryPoint(i, jMin, leftPotential);
-        unsolvedSystem.setBoundaryPoint(i, jMax, rightPotential);
+    for(int j=jMin; j<=jMax; j++) {
+        unsolvedSystem.setBoundaryPoint(iMin, j, leftPotential);
+        unsolvedSystem.setBoundaryPoint(iMax, j, rightPotential);
     }
 
     electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
