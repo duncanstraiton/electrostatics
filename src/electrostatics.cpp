@@ -60,10 +60,5 @@ int main() {
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystem);
 
     // Output the system as as a list of the following form:  iValue  jValue  potentialAt(i,j)
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            std::cout << i << " " << j << " " << solvedSystem.getPotentialIJ(i, j) << "\n";
-        }
-        std::cout << "\n";;
-    }
+    solvedSystem.printGNUPlot();
 }

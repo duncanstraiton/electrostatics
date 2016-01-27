@@ -71,8 +71,11 @@ class ElectrostaticSystem {
         long ij2k(int i, int j) const;
         int* k2ij(long k) const;
 
-        /* Print out the system potentials in the grid form described above/ */
+        /* Print out the system potentials in the grid form described above. */
         void print() const;
+
+        /* Print the system potentials in the correct format to plot with gnuplot. */
+        void printGNUPlot() const;
 };
 
 } // namespace electrostatics

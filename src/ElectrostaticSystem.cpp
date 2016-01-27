@@ -71,4 +71,16 @@ void ElectrostaticSystem::print() const {
     std::cout << potentials.transpose().colwise().reverse();
 }
 
+/* Print in the correct form for GNU Plot:
+ * List of iValue  JValue  potentialAt(i,j)
+ */
+void ElectrostaticSystem::printGNUPlot() const {
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            std::cout << i << " " << j << " " << getPotentialIJ(i, j) << "\n";
+        }
+        std::cout << "\n";
+    }
+}
+
 } // namespace electrostatics
