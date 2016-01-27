@@ -3,8 +3,6 @@
 #include "UnsolvedElectrostaticSystem.h"
 #include <iostream>
 #include <cmath>
-#include <string>
-#include <cctype>
 
 //double problem1analytical();
 //double problem2analytical();
@@ -42,11 +40,7 @@ int main() {
 
 
 void solveProblem1() {
-    std::string answer;    // To hold users response to yes/no questions
-    std::string fileName;  // To hold file names input by the user
     double radius;         // To hold the radius of the current point while looping over points
-    bool plotNumerical;    // True if numerical solution is plotted
-    bool plotAnalytical;   // True if analytical solution is plotted
 
     std::cout << "Solving system 1 using grid size ixj.\n";
 
@@ -64,10 +58,6 @@ void solveProblem1() {
     std::cout << "Enter maximum value for j: ";
     std::cin >> jMax;
 
-    // Create variables to store the solutions
-    electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
-    electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
-
     // Get the necessary parameters - inner cylinder is A, outer is B
     double radiusA;
     double potentialA;
@@ -83,71 +73,46 @@ void solveProblem1() {
     std::cin >> potentialB;
 
 
-    // Solve and save plot data for the numerical solution if desired
-    std::cout << "\nDo you want to solve numerically and save numerical solution plot data? (y/n): ";
-    std::cin >> answer;
-    plotNumerical = std::toupper(answer.front()) == 'Y';
-    if(plotNumerical) {
-        // Setup the unsolved system with the boundary conditions, and then solve it
-        electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
-        unsolvedSystem.setBoundaryCircle(0, 0, radiusA, potentialA);
-        unsolvedSystem.setBoundaryRing(0, 0, radiusB, potentialB);
- 
-        electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
+    // Numerical Solution
+    // Setup the unsolved system with the boundary conditions, and then solve it
+    electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
+    unsolvedSystem.setBoundaryCircle(0, 0, radiusA, potentialA);
+    unsolvedSystem.setBoundaryRing(0, 0, radiusB, potentialB);
 
-        std::cout << "Enter the file name for the numerical solution data: ";
-        std::cin >> fileName;
-        solvedSystemNumerical.saveFileGNUPlot(fileName);
-    }
+    electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
+    electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
+    solvedSystemNumerical.saveFileGNUPlot("numericalProblem1");
 
 
-    // Save plot data for the analytical solution if desired
-    std::cout << "\nDo you want to save analytical solution plot data? (y/n): ";
-    std::cin >> answer;
-    plotAnalytical = std::toupper(answer.front()) == 'Y';
-    if(plotAnalytical) {
-        // Calculate the potential at each point using the analytical solution
-        systemAnalytical.setPotentialCircle(0, 0, radiusA, potentialA);
-        for(int i=iMin; i<=iMax; i++) {
-            for(int j=jMin; j<=jMax; j++) {
-                radius = std::sqrt(std::pow(i, 2) + std::pow(j, 2));
-                if(radius > radiusA && radius <= radiusB) {
-                    systemAnalytical.setPotentialIJ(i, j, potentialA + 
-                            ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
-                }
-                else if(radius > radiusB) {
-                    systemAnalytical.setPotentialIJ(i, j, potentialB);
-                }
+    // Analytical solution
+    electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
+    // Calculate the potential at each point using the analytical solution
+    systemAnalytical.setPotentialCircle(0, 0, radiusA, potentialA);
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            radius = std::sqrt(std::pow(i, 2) + std::pow(j, 2));
+            if(radius > radiusA && radius <= radiusB) {
+                systemAnalytical.setPotentialIJ(i, j, potentialA + 
+                        ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
+            }
+            else if(radius > radiusB) {
+                systemAnalytical.setPotentialIJ(i, j, potentialB);
             }
         }
-
-        std::cout << "Enter the file name for the analytical solution data: ";
-        std::cin >> fileName;
-        systemAnalytical.saveFileGNUPlot(fileName);
     }
+    systemAnalytical.saveFileGNUPlot("analyticalProblem1");
 
 
-    // Save plot data for the difference between analytical and numerical solutions if desired
-    if(plotAnalytical && plotNumerical) {
-        std::cout << "\nDo you want to save plot data for the difference between analytical" << 
-            " and numerical soultions? (y/n): ";
-        std::cin >> answer;
-        if(std::toupper(answer.front()) == 'Y') {
-            electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
-
-            // Calculate the absolute value of the difference at each point
-            for(int i=iMin; i<=iMax; i++) {
-                for(int j=jMin; j<=jMax; j++) {
-                    solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
-                                systemAnalytical.getPotentialIJ(i, j)));
-                }
-            }
-
-            std::cout << "Enter the file name for the solution comparison data: ";
-            std::cin >> fileName;
-            solutionComparison.saveFileGNUPlot(fileName);
+    // Difference between analytical and numerical solutions
+    electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
+    // Calculate the absolute value of the difference at each point
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
+                        systemAnalytical.getPotentialIJ(i, j)));
         }
     }
+    solutionComparison.saveFileGNUPlot("differenceProblem1");
 }
 
 
