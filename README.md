@@ -66,11 +66,11 @@ make
 ```
 
 ##### Running the Program
-The main funtion of the program currently solves the second problem in the project description document and saves the output to a file called "electrostatics.out". To run the porgram and plot the output do the following:
+The main funtion of the program currently solves the first problem in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following:
 ```bash
 cd bin
 ./electrostatics
-gnuplot ../scripts/plot.plt
+gnuplot ../scripts/plotProblem1.plt
 ```
 
-This will generate the plot as an eps file called plot that can then be opened with a program like gv. You will need gnuplot installed to generate the plot.
+This will generate the plots as eps files called that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.

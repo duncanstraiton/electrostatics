@@ -117,6 +117,77 @@ void solveProblem1() {
 
 
 void solveProblem2() {
-    /* TO DO! */
-    std::cout << "No solution for system 2 yet.";
+    double radius;         // To hold the radius of the current point while looping over points
+
+    std::cout << "Solving system 2 using grid size ixj.\n";
+
+    // Get the dimensions of the problem
+    int iMin;
+    int iMax;
+    int jMin;
+    int jMax;
+    std::cout <<"Enter minimum value for i: ";
+    std::cin >> iMin;
+    std::cout <<"Enter maximum value for i: ";
+    std::cin >> iMax;
+    std::cout <<"Enter minimum value for j: ";
+    std::cin >> jMin;
+    std::cout << "Enter maximum value for j: ";
+    std::cin >> jMax;
+
+    // Get the necessary parameters
+    double cylinderRadius;
+    double cylinderPotential;
+    double leftPotential;
+    double rightPotential;
+    std::cout << "Enter radius for cylinder: ";
+    std::cin >> cylinderRadius;
+    std::cout << "Enter potential for cylinder: ";
+    std::cin >> cylinderPotential; 
+    std::cout << "Enter potential for left plate: ";
+    std::cin >> leftPotential;
+    std::cout << "Enter potential for right plate: ";
+    std::cin >> rightPotential;
+
+
+    // Numerical Solution
+    // Setup the unsolved system with the boundary conditions, and then solve it
+    electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
+    unsolvedSystem.setBoundaryCircle(0, 0, cylinderRadius, cylinderPotential);
+    for(int i=iMin; i<=iMax; i++) {
+        unsolvedSystem.setBoundaryPoint(i, jMin, leftPotential);
+        unsolvedSystem.setBoundaryPoint(i, jMax, rightPotential);
+    }
+
+    electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
+    electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
+    solvedSystemNumerical.saveFileGNUPlot("numericalProblem2");
+
+
+    // Analytical solution
+    electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
+    // Calculate the potential at each point using the analytical solution
+    systemAnalytical.setPotentialCircle(0, 0, cylinderRadius, cylinderPotential);
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            // 
+            // STILL NEED TO FIND ANALYTICAL SOLUTION FOR PROBLEM 2!
+            //
+        }
+    }
+
+    std::cout << "This wont work as the analytical solution for problem 2 has not been added yet!";
+    systemAnalytical.saveFileGNUPlot("analyticalProblem2");
+
+
+    // Difference between analytical and numerical solutions
+    electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
+    // Calculate the absolute value of the difference at each point
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
+                        systemAnalytical.getPotentialIJ(i, j)));
+        }
+    }
+    solutionComparison.saveFileGNUPlot("differenceProblem2");
 }
