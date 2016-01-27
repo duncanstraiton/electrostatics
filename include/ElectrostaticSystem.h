@@ -31,6 +31,7 @@
 #define ELECTROSTATICSYSTEM_H
 
 #include <Eigen/Dense>
+#include <string>
 
 namespace electrostatics{
 
@@ -76,6 +77,11 @@ class ElectrostaticSystem {
 
         /* Print the system potentials in the correct format to plot with gnuplot. */
         void printGNUPlot() const;
+
+        /* Save a file with the specified name containing the system potentials in the 
+         * correct format for using with GNU Plot.
+         */
+        void saveFileGNUPlot(std::string fileName) const;
 };
 
 } // namespace electrostatics

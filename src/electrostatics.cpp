@@ -8,6 +8,9 @@
  * however this is just as a temporary test to check that things are working
  * and to get some initial output.
  *
+ * The solved system potentials are saved to a file called "electrostatics.out"
+ * in the correct format to use with GNU Plot.
+ *
  * It will need to be generalised / changed to allow solving of arbitrary electrostatic
  * systems.
  */
@@ -60,5 +63,5 @@ int main() {
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystem);
 
     // Output the system as as a list of the following form:  iValue  jValue  potentialAt(i,j)
-    solvedSystem.printGNUPlot();
+    solvedSystem.saveFileGNUPlot("electrostatics.out");
 }

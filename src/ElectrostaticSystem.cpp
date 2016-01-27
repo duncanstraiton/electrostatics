@@ -1,6 +1,8 @@
 #include <Eigen/Dense>
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "ElectrostaticSystem.h"
 
 namespace electrostatics {
@@ -71,9 +73,6 @@ void ElectrostaticSystem::print() const {
     std::cout << potentials.transpose().colwise().reverse();
 }
 
-/* Print in the correct form for GNU Plot:
- * List of iValue  JValue  potentialAt(i,j)
- */
 void ElectrostaticSystem::printGNUPlot() const {
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
@@ -81,6 +80,18 @@ void ElectrostaticSystem::printGNUPlot() const {
         }
         std::cout << "\n";
     }
+}
+
+void ElectrostaticSystem::saveFileGNUPlot(std::string fileName) const {
+    std::ofstream outputFile;
+    outputFile.open(fileName.c_str());
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<=jMax; j++) {
+            outputFile << i << " " << j << " " << getPotentialIJ(i, j) << "\n";
+        }
+        outputFile << "\n";
+    }
+    outputFile.close();
 }
 
 } // namespace electrostatics

@@ -66,10 +66,10 @@ make
 ```
 
 ##### Running the Program
-The main funtion of the program currently solves the second problem in the project description document. To run the porgram and plot the output do the following:
+The main funtion of the program currently solves the second problem in the project description document and saves the output to a file called "electrostatics.out". To run the porgram and plot the output do the following:
 ```bash
 cd bin
-./electrostatics > electrostatics.out
+./electrostatics
 gnuplot ../scripts/plot.plt
 ```
 
