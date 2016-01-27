@@ -1,5 +1,6 @@
 #include <Eigen/Dense>
 #include <stdexcept>
+#include <cmath>
 #include "ElectrostaticSystem.h"
 #include "UnsolvedElectrostaticSystem.h"
 
@@ -43,6 +44,41 @@ void UnsolvedElectrostaticSystem::setBoundaryConditionK(long k, bool isBoundaryC
     if(k>kMax || k<0) throw std::out_of_range("Error: Trying to set element out of range!");
     int* ij = k2ij(k);
     boundaryConditionPositions(ij[0]-iMin, ij[1]-jMin) = isBoundaryCondition;
+}
+
+void UnsolvedElectrostaticSystem::setBoundaryPoint(int i, int j, double potential) {
+    setBoundaryConditionIJ(i, j, true);
+    setPotentialIJ(i, j, potential);
+}
+
+void UnsolvedElectrostaticSystem::setBoundaryRing(int centreI, int centreJ, double radius, double potential) {
+    int iOffset, jOffset;
+    for(iOffset=std::ceil(radius); iOffset>=0; iOffset--) {
+        if(iOffset > radius) jOffset = 0;
+        else jOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(iOffset,2) ));
+        setBoundaryPoint(centreI+iOffset, centreJ+jOffset, potential);
+        setBoundaryPoint(centreI+iOffset, centreJ-jOffset, potential);
+        setBoundaryPoint(centreI-iOffset, centreJ+jOffset, potential);
+        setBoundaryPoint(centreI-iOffset, centreJ-jOffset, potential);
+    }
+    for(jOffset=std::ceil(radius); jOffset>=0; jOffset--) {
+        if(jOffset > radius) iOffset = 0;
+        else iOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(jOffset,2) ));
+        setBoundaryPoint(centreI+iOffset, centreJ+jOffset, potential);
+        setBoundaryPoint(centreI+iOffset, centreJ-jOffset, potential);
+        setBoundaryPoint(centreI-iOffset, centreJ+jOffset, potential);
+        setBoundaryPoint(centreI-iOffset, centreJ-jOffset, potential);
+    }
+}
+
+void UnsolvedElectrostaticSystem::setBoundaryCircle(int centreI, int centreJ, double radius, double potential) {
+    for(int i=centreI-std::ceil(radius); i<=centreI+std::ceil(radius); i++) {
+        for(int j=centreJ-std::ceil(radius); j<=centreJ+std::ceil(radius); j++) {
+            if(std::sqrt( std::pow(i,2)+std::pow(j,2) ) <=radius) {
+                setBoundaryPoint(i, j, potential);
+            }
+        }
+    }
 }
 
 } // namespace electrostatics

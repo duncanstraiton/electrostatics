@@ -68,6 +68,19 @@ class ElectrostaticSystem {
         void setPotentialIJ(int i, int j, double potential);
         void setPotentialK(long k, double potential);
 
+        /* Set the potential for a circle centred at (i, j) with radius r.
+         * Note: This creates a ring only.
+         * For a filled circle use setPotentialCircle() 
+         */
+        void setPotentialRing(int i, int j, double radius, double potential);
+
+        /* Set the potential for a circle centred at (i, j) with radius r.
+         * Note: This creates a filled circle.
+         * For a ring only use setPotentialRing()
+         */
+        void setPotentialCircle(int i, int j, double radius, double potential);
+
+
         /* Convert between (i, j) coordinates and (k) positions. */
         long ij2k(int i, int j) const;
         int* k2ij(long k) const;

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 #include "ElectrostaticSystem.h"
 
 namespace electrostatics {
@@ -53,6 +54,36 @@ long ElectrostaticSystem::ij2k(int i, int j) const {
     i = i - iMin;
     j = j - jMin;
     return i + j*(iMax-iMin+1);
+}
+
+void ElectrostaticSystem::setPotentialRing(int centreI, int centreJ, double radius, double potential) {
+    int iOffset, jOffset;
+    for(iOffset=std::ceil(radius); iOffset>=0; iOffset--) {
+        if(iOffset > radius) jOffset = 0;
+        else jOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(iOffset,2) ));
+        setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
+        setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
+        setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
+        setPotentialIJ(centreI-iOffset, centreJ-jOffset, potential);
+    }
+    for(jOffset=std::ceil(radius); jOffset>=0; jOffset--) {
+        if(jOffset > radius) iOffset = 0;
+        else iOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(jOffset,2) ));
+        setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
+        setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
+        setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
+        setPotentialIJ(centreI-iOffset, centreJ-jOffset, potential);
+    }
+}
+
+void ElectrostaticSystem::setPotentialCircle(int centreI, int centreJ, double radius, double potential) {
+    for(int i=centreI-std::ceil(radius); i<=centreI+std::ceil(radius); i++) {
+        for(int j=centreJ-std::ceil(radius); j<=centreJ+std::ceil(radius); j++) {
+            if( std::sqrt( std::pow(i,2)+std::pow(j,2) ) <= radius) {
+                setPotentialIJ(i, j, potential);
+            }
+        }
+    }
 }
 
 int* ElectrostaticSystem::k2ij(long k) const {

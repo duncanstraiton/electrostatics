@@ -47,6 +47,21 @@ class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
         /* Set/unset position (i, j) or (k) as a boundary condition. */
         void setBoundaryConditionIJ(int i, int j, bool isBoundaryCondition);
         void setBoundaryConditionK(long k, bool isBoundaryCondition);
+
+        /* Set a point as a boundary condition with specified potential. */
+        void setBoundaryPoint(int i, int j, double potential);
+
+        /* Set ring as boundary condition with specified potential.
+         * Note: This creates a ring only.
+         * For a filled circle use setBoundaryCircle()
+         */
+        void setBoundaryRing(int centreI, int centreJ, double radius, double potential);
+
+        /* Set circle as boundary condition with specified potential.
+         * Note: This creates a filled circle.
+         * For a ring only use setBoundaryRing()
+         */
+        void setBoundaryCircle(int centreI, int centreJ, double radius, double potential);
 };
 
 } // namespace electrostatics
