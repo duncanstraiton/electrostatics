@@ -12,8 +12,8 @@ namespace electrostatics {
 
 ElectrostaticSystem::ElectrostaticSystem(Eigen::MatrixXd &potentials, int iMin, int jMin) :
     iMin(iMin), jMin(jMin), potentials(potentials) {
-        iMax = iMin + potentials.cols() - 1;
-        jMax = jMin + potentials.rows() - 1;
+        iMax = iMin + potentials.rows() - 1;
+        jMax = jMin + potentials.cols() - 1;
         kMax = ((iMax-iMin+1) * (jMax-jMin+1)) - 1;
 }
 
