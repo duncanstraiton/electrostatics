@@ -58,18 +58,28 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
              * for (i, j) to A:
              * (i, j+1) + (i, j-1) + (i+1, j) + (i-1, j) - 4(i, j) = 0
              * If (i, j) is on the edge of the system, ignore points that would
-             * end up outside.
+             * end up outside and adjust the coefficent for that point (the 
+             * 4 in the above equation) accordingly.
              */
             else {
-                A.insert(k, k) = -4;
-                if(k<kMax) A.insert(k, k+1) = 1;
-                if(k>1) A.insert(k, k-1) = 1;
+                int surroundingPoints = 0;
+                if(i<unsolvedSystem.getIMax()) {
+                    A.insert(k, k+1) = 1;
+                    surroundingPoints += 1;
+                }
+                if(i>unsolvedSystem.getIMin()) {
+                    A.insert(k, k-1) = 1;
+                    surroundingPoints += 1;
+                }
                 if(j<unsolvedSystem.getJMax()) {
                     A.insert(k, k+unsolvedSystem.getLengthI()) = 1;
+                    surroundingPoints += 1;
                 }
                 if(k>unsolvedSystem.getLengthI()) {
-                    A. insert(k, k-unsolvedSystem.getLengthI()) = 1;
+                    A.insert(k, k-unsolvedSystem.getLengthI()) = 1;
+                    surroundingPoints += 1;
                 }
+                A.insert(k, k) = -surroundingPoints;
             }
         }
     }
