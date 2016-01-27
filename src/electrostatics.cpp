@@ -111,8 +111,13 @@ void solveProblem1() {
         for(int i=iMin; i<=iMax; i++) {
             for(int j=jMin; j<=jMax; j++) {
                 radius = std::sqrt(std::pow(i, 2) + std::pow(j, 2));
-                systemAnalytical.setPotentialIJ(i, j, potentialA + 
-                        ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
+                if(radius > radiusA && radius <= radiusB) {
+                    systemAnalytical.setPotentialIJ(i, j, potentialA + 
+                            ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
+                }
+                else if(radius > radiusB) {
+                    systemAnalytical.setPotentialIJ(i, j, potentialB);
+                }
             }
         }
 
