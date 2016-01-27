@@ -3,65 +3,150 @@
 #include "UnsolvedElectrostaticSystem.h"
 #include <iostream>
 #include <cmath>
+#include <string>
+#include <cctype>
 
-/* Currently set to solve the second problem from the project guide,
- * however this is just as a temporary test to check that things are working
- * and to get some initial output.
- *
- * The solved system potentials are saved to a file called "electrostatics.out"
- * in the correct format to use with GNU Plot.
+//double problem1analytical();
+//double problem2analytical();
+void solveProblem1();
+void solveProblem2();
+
+/* Currently asks the user to select problem 1 or 2 and to input the relevant paramters.
+ * The output (plot data for the analytical solution, plot data for the numerical solution, 
+ * and plot data for the difference between the two solutions) is saved to the specified files.
  *
  * It will need to be generalised / changed to allow solving of arbitrary electrostatic
  * systems.
  */
 int main() {
-    // Set up the unsolved system
-    int iMin = -50;
-    int iMax = 50;
-    int jMin = -50;
-    int jMax = 50;
-    electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
+    int problemNumber;
 
-    /* Second problem from group project description:
-     * parallel plates to left and right, left at +v,
-     * right at -v, circle (radius r) in the middle at v=0.
-     */
-    int v1 = 5;      // Voltage at left hand plate
-    int v2 = 0;      // Voltage of circle in middle
-    int v3 = -5;     // Voltage of right hand plate
-    int radius = 25; // Radius of the circle
+    std::cout << "\nWhich system would you like to generate plot data for?\n" <<
+        "1. The system with the two concentical cylinders.\n" <<
+        "2. The system with the cylinder between two plates.\n" <<
+        "Enter '1' or '2': ";
+    std::cin >> problemNumber;
+    std::cout << "\n";
 
-    // Set points as required
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            
-            // Set left hand plate as boundary condition
-            if(i==iMin) {
-                unsolvedSystem.setPotentialIJ(i, j, v1);
-                unsolvedSystem.setBoundaryConditionIJ(i, j, true);
-            }
+    switch(problemNumber) {
+        case 1:
+            solveProblem1();
+            break;
+        case 2:
+            solveProblem2();
+            break;
+    }
+    std::cout << "\n";
+    return 0;
+}
 
-            // Set right hand plate as boundary condition
-            else if(i==iMax) {
-                unsolvedSystem.setPotentialIJ(i, j, v3);
-                unsolvedSystem.setBoundaryConditionIJ(i, j, true);
-            }
 
-            // Set circle as boundary condition
-            else if(sqrt(pow(i, 2) + pow(j ,2)) <= radius) {
-                unsolvedSystem.setPotentialIJ(i, j, v2);
-                unsolvedSystem.setBoundaryConditionIJ(i, j, true);
-            }
-        }
+void solveProblem1() {
+    std::string answer;    // To hold users response to yes/no questions
+    std::string fileName;  // To hold file names input by the user
+    double radius;         // To hold the radius of the current point while looping over points
+    bool plotNumerical;    // True if numerical solution is plotted
+    bool plotAnalytical;   // True if analytical solution is plotted
+
+    std::cout << "Solving system 1 using grid size ixj.\n";
+
+    // Get the dimensions of the problem
+    int iMin;
+    int iMax;
+    int jMin;
+    int jMax;
+    std::cout <<"Enter minimum value for i: ";
+    std::cin >> iMin;
+    std::cout <<"Enter maximum value for i: ";
+    std::cin >> iMax;
+    std::cout <<"Enter minimum value for j: ";
+    std::cin >> jMin;
+    std::cout << "Enter maximum value for j: ";
+    std::cin >> jMax;
+
+    // Create variables to store the solutions
+    electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
+    electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
+
+    // Get the necessary parameters - inner cylinder is A, outer is B
+    double radiusA;
+    double potentialA;
+    double radiusB;
+    double potentialB;
+    std::cout << "Enter radius for inner cylinder: ";
+    std::cin >> radiusA;
+    std::cout << "Enter potential for inner cylinder: ";
+    std::cin >> potentialA; 
+    std::cout << "Enter radius for outer cylinder: ";
+    std::cin >> radiusB;
+    std::cout << "Enter potential for outer cylinder: ";
+    std::cin >> potentialB;
+
+
+    // Solve and save plot data for the numerical solution if desired
+    std::cout << "\nDo you want to solve numerically and save numerical solution plot data? (y/n): ";
+    std::cin >> answer;
+    plotNumerical = std::toupper(answer.front()) == 'Y';
+    if(plotNumerical) {
+        // Setup the unsolved system with the boundary conditions, and then solve it
+        electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
+        unsolvedSystem.setBoundaryCircle(0, 0, radiusA, potentialA);
+        unsolvedSystem.setBoundaryRing(0, 0, radiusB, potentialB);
+ 
+        electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
+
+        std::cout << "Enter the file name for the numerical solution data: ";
+        std::cin >> fileName;
+        solvedSystemNumerical.saveFileGNUPlot(fileName);
     }
 
-    // Create the solved system
-    electrostatics::SolvedElectrostaticSystem solvedSystem(iMin, iMax, jMin, jMax);
 
-    // Pass the unsolved system to the finite difference solving function along with 
-    // the new solved system object just created for it to store the results in
-    electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystem);
+    // Save plot data for the analytical solution if desired
+    std::cout << "\nDo you want to save analytical solution plot data? (y/n): ";
+    std::cin >> answer;
+    plotAnalytical = std::toupper(answer.front()) == 'Y';
+    if(plotAnalytical) {
+        // Calculate the potential at each point using the analytical solution
+        systemAnalytical.setPotentialCircle(0, 0, radiusA, potentialA);
+        for(int i=iMin; i<=iMax; i++) {
+            for(int j=jMin; j<=jMax; j++) {
+                radius = std::sqrt(std::pow(i, 2) + std::pow(j, 2));
+                systemAnalytical.setPotentialIJ(i, j, potentialA + 
+                        ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
+            }
+        }
 
-    // Output the system as as a list of the following form:  iValue  jValue  potentialAt(i,j)
-    solvedSystem.saveFileGNUPlot("electrostatics.out");
+        std::cout << "Enter the file name for the analytical solution data: ";
+        std::cin >> fileName;
+        systemAnalytical.saveFileGNUPlot(fileName);
+    }
+
+
+    // Save plot data for the difference between analytical and numerical solutions if desired
+    if(plotAnalytical && plotNumerical) {
+        std::cout << "\nDo you want to save plot data for the difference between analytical" << 
+            " and numerical soultions? (y/n): ";
+        std::cin >> answer;
+        if(std::toupper(answer.front()) == 'Y') {
+            electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
+
+            // Calculate the absolute value of the difference at each point
+            for(int i=iMin; i<=iMax; i++) {
+                for(int j=jMin; j<=jMax; j++) {
+                    solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
+                                systemAnalytical.getPotentialIJ(i, j)));
+                }
+            }
+
+            std::cout << "Enter the file name for the solution comparison data: ";
+            std::cin >> fileName;
+            solutionComparison.saveFileGNUPlot(fileName);
+        }
+    }
+}
+
+
+void solveProblem2() {
+    /* TO DO! */
+    std::cout << "No solution for system 2 yet.";
 }
