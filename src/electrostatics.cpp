@@ -117,8 +117,6 @@ void solveProblem1() {
 
 
 void solveProblem2() {
-    double radius;         // To hold the radius of the current point while looping over points
-
     std::cout << "Solving system 2 using grid size ixj.\n";
 
     // Get the dimensions of the problem
@@ -163,7 +161,7 @@ void solveProblem2() {
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
     solvedSystemNumerical.saveFileGNUPlot("numericalProblem2");
 
-
+/*
     // Analytical solution
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
     // Calculate the potential at each point using the analytical solution
@@ -190,4 +188,5 @@ void solveProblem2() {
         }
     }
     solutionComparison.saveFileGNUPlot("differenceProblem2");
+    */
 }

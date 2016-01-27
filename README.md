@@ -66,7 +66,7 @@ make
 ```
 
 ##### Running the Program
-The main funtion of the program currently solves the first problem in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following:
+The main funtion of the program currently solves the first problem in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following (it is best to choose a grid of -50 to 50 as this is the dimensions of the plots generated):
 ```bash
 cd bin
 ./electrostatics
