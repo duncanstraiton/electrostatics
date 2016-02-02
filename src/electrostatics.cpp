@@ -117,8 +117,6 @@ void solveProblem1() {
 
 
 void solveProblem2() {
-    std::cout << "Solving system 2 using grid size ixj.\n";
-
     // Get the dimensions of the problem
     int iMin;
     int iMax;
@@ -161,20 +159,27 @@ void solveProblem2() {
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
     solvedSystemNumerical.saveFileGNUPlot("numericalProblem2");
 
-/*
     // Analytical solution
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
     // Calculate the potential at each point using the analytical solution
     systemAnalytical.setPotentialCircle(0, 0, cylinderRadius, cylinderPotential);
+    double field = (rightPotential-leftPotential)/(iMax-iMin);
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            // 
-            // STILL NEED TO FIND ANALYTICAL SOLUTION FOR PROBLEM 2!
-            //
+            double radius = sqrt(i*i + j*j);
+            double theta;
+            int sign;
+            if(i>0) sign = 1;
+            else sign = -1;
+            if(i==0) theta = M_PI / 2;
+            else theta = atan((double)j/i);
+            if(radius > cylinderRadius) {
+                systemAnalytical.setPotentialIJ(i, j, field * sign *
+                    (radius - (pow(cylinderRadius, 3) / pow(radius, 2))) *
+                     cos(theta));
+            }
         }
     }
-
-    std::cout << "This wont work as the analytical solution for problem 2 has not been added yet!";
     systemAnalytical.saveFileGNUPlot("analyticalProblem2");
 
 
@@ -188,5 +193,4 @@ void solveProblem2() {
         }
     }
     solutionComparison.saveFileGNUPlot("differenceProblem2");
-    */
 }
