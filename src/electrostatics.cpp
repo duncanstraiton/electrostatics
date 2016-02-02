@@ -163,18 +163,19 @@ void solveProblem2() {
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
     // Calculate the potential at each point using the analytical solution
     systemAnalytical.setPotentialCircle(0, 0, cylinderRadius, cylinderPotential);
-    double field = (rightPotential-leftPotential)/(iMax-iMin);
+    double radius;  // Radius of current point (i, j)
+    double theta;   // Angle for current point (i, j)
+    int sign;       // To adjust the sign of cos(theta) depending on the quadrant
+    double uniformField = (rightPotential-leftPotential)/(iMax-iMin); // Field without the cylinder
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            double radius = sqrt(i*i + j*j);
-            double theta;
-            int sign;
-            if(i>0) sign = 1;
+            radius = sqrt(pow(i, 2) + pow(j, 2));
+            if(i>=0) sign = 1;
             else sign = -1;
             if(i==0) theta = M_PI / 2;
             else theta = atan((double)j/i);
             if(radius > cylinderRadius) {
-                systemAnalytical.setPotentialIJ(i, j, field * sign *
+                systemAnalytical.setPotentialIJ(i, j, uniformField * sign *
                     (radius - (pow(cylinderRadius, 2) / radius)) *
                      cos(theta));
             }
