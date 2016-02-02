@@ -70,7 +70,7 @@ The main funtion of the program currently solves the first and second problems i
 ```bash
 cd bin
 ./electrostatics
-gnuplot ../scripts/plotProblemX.plt         # Replace X with the problem number you have generated the data for
+gnuplot ../scripts/plotProblemX.plt # Replace X with the problem number you have generated the data for
 ```
 
 This will generate the plots as eps files called that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.
