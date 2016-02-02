@@ -66,11 +66,11 @@ make
 ```
 
 ##### Running the Program
-The main funtion of the program currently solves the first problem in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following (it is best to choose a square grid of -50 to 50 as this is the dimensions of the plots generated):
+The main funtion of the program currently solves the first and second problems in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following (it is best to choose a square grid of -50 to 50 as this is the dimensions of the plots generated):
 ```bash
 cd bin
 ./electrostatics
-gnuplot ../scripts/plotProblem1.plt
+gnuplot ../scripts/plotProblemX.plt         # Replace X with the problem number you have generated the data for
 ```
 
 This will generate the plots as eps files called that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.
