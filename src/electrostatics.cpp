@@ -175,7 +175,7 @@ void solveProblem2() {
             else theta = atan((double)j/i);
             if(radius > cylinderRadius) {
                 systemAnalytical.setPotentialIJ(i, j, field * sign *
-                    (radius - (pow(cylinderRadius, 3) / pow(radius, 2))) *
+                    (radius - (pow(cylinderRadius, 2) / radius)) *
                      cos(theta));
             }
         }
