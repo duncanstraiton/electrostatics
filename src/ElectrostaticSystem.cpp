@@ -125,4 +125,30 @@ void ElectrostaticSystem::saveFileGNUPlot(std::string fileName) const {
     outputFile.close();
 }
 
+void ElectrostaticSystem::compareTo(const ElectrostaticSystem &otherSystem,
+        ElectrostaticSystem &comparisonResults) {
+    if(this->getIMin() != otherSystem.getIMin() ||
+            this->getIMax() != otherSystem.getIMax() ||
+            this->getJMin() != otherSystem.getJMin() ||
+            this->getJMax() != otherSystem.getJMax() ||
+            this->getIMin() != comparisonResults.getIMin() ||
+            this->getIMax() != comparisonResults.getIMax()) {
+        throw std::invalid_argument(
+                "The dimensions of both systems and the system for the results must match!");
+    }
+
+    for(int i=iMin; i<=iMax; i++) {
+        for(int j=jMin; j<jMax; j++) {
+            comparisonResults.setPotentialIJ(i, j, abs(this->getPotentialIJ(i,j) -
+                        otherSystem.getPotentialIJ(i, j)));
+        }
+    }
+}
+
+
+
+
+
+
+
 } // namespace electrostatics

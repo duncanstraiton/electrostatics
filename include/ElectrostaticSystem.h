@@ -98,6 +98,11 @@ class ElectrostaticSystem {
          * correct format for using with GNU Plot.
          */
         void saveFileGNUPlot(std::string fileName) const;
+
+        /* Compare this system to otherSystem. Stores the absoulte difference in the relevant
+         * position of comparisonResults.
+        */
+        void compareTo(const ElectrostaticSystem &otherSystem, ElectrostaticSystem &comparisonResults);
 };
 
 } // namespace electrostatics

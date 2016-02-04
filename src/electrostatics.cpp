@@ -98,13 +98,7 @@ void solveProblem1() {
 
     // Difference between analytical and numerical solutions
     electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
-    // Calculate the absolute value of the difference at each point
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            solutionComparison.setPotentialIJ(i, j, abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
-                        systemAnalytical.getPotentialIJ(i, j)));
-        }
-    }
+    solvedSystemNumerical.compareTo(systemAnalytical, solutionComparison);
     solutionComparison.saveFileGNUPlot("differenceProblem1");
 }
 
@@ -131,8 +125,10 @@ void solveProblem2() {
     double rightPotential;
     std::cout << "Enter radius for cylinder: ";
     std::cin >> cylinderRadius;
-    std::cout << "Enter potential for cylinder: ";
-    std::cin >> cylinderPotential; 
+    // std::cout << "Enter potential for cylinder: ";
+    // std::cin >> cylinderPotential; 
+    // Cylinder potential has to be 0!
+    cylinderPotential = 0;
     std::cout << "Enter potential for left plate: ";
     std::cin >> leftPotential;
     std::cout << "Enter potential for right plate: ";
@@ -168,12 +164,6 @@ void solveProblem2() {
 
     // Difference between analytical and numerical solutions
     electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
-    // Calculate the absolute value of the difference at each point
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            solutionComparison.setPotentialIJ(i, j, abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
-                        systemAnalytical.getPotentialIJ(i, j)));
-        }
-    }
+    solvedSystemNumerical.compareTo(systemAnalytical, solutionComparison);
     solutionComparison.saveFileGNUPlot("differenceProblem2");
 }
