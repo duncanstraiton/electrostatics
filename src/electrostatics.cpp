@@ -1,4 +1,5 @@
 #include "finiteDifferenceSolve.h"
+#include "analyticalSolutions.h"
 #include "SolvedElectrostaticSystem.h"
 #include "UnsolvedElectrostaticSystem.h"
 #include <iostream>
@@ -40,8 +41,6 @@ int main() {
 
 
 void solveProblem1() {
-    double radius;         // To hold the radius of the current point while looping over points
-
     std::cout << "Solving system 1 using grid size ixj.\n";
 
     // Get the dimensions of the problem
@@ -90,14 +89,8 @@ void solveProblem1() {
     systemAnalytical.setPotentialCircle(0, 0, radiusA, potentialA);
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            radius = std::sqrt(std::pow(i, 2) + std::pow(j, 2));
-            if(radius > radiusA && radius <= radiusB) {
-                systemAnalytical.setPotentialIJ(i, j, potentialA + 
-                        ((potentialB-potentialA) / std::log(radiusB/radiusA)) * std::log(radius/radiusA));
-            }
-            else if(radius > radiusB) {
-                systemAnalytical.setPotentialIJ(i, j, potentialB);
-            }
+            systemAnalytical.setPotentialIJ(i, j,
+                    electrostatics::analyticalProblem1(i, j, radiusA, radiusB, potentialA, potentialB));
         }
     }
     systemAnalytical.saveFileGNUPlot("analyticalProblem1");
@@ -163,22 +156,11 @@ void solveProblem2() {
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
     // Calculate the potential at each point using the analytical solution
     systemAnalytical.setPotentialCircle(0, 0, cylinderRadius, cylinderPotential);
-    double radius;  // Radius of current point (i, j)
-    double theta;   // Angle for current point (i, j)
-    int sign;       // To adjust the sign of cos(theta) depending on the quadrant
-    double uniformField = (rightPotential-leftPotential)/(iMax-iMin); // Field without the cylinder
+    double uniformField =electrostatics::uniformField(iMin, iMax, leftPotential, rightPotential);
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            radius = sqrt(pow(i, 2) + pow(j, 2));
-            if(i>=0) sign = 1;
-            else sign = -1;
-            if(i==0) theta = M_PI / 2;
-            else theta = atan((double)j/i);
-            if(radius > cylinderRadius) {
-                systemAnalytical.setPotentialIJ(i, j, uniformField * sign *
-                    (radius - (pow(cylinderRadius, 2) / radius)) *
-                     cos(theta));
-            }
+            systemAnalytical.setPotentialIJ(i, j, 
+                    electrostatics::analyticalProblem2(i, j, cylinderRadius, uniformField));
         }
     }
     systemAnalytical.saveFileGNUPlot("analyticalProblem2");
