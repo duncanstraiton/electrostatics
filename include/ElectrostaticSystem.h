@@ -59,12 +59,12 @@ class ElectrostaticSystem {
         int getLengthJ() const { return potentials.cols(); }
 
 
-        /* Get the potential at position (i, j) or (k).*/
+        /* Get the potential at position (i, j) or (k). */
         double getPotentialIJ(int i, int j) const;
         double getPotentialK(long k) const;
 
 
-        /* Set the potential at position (i, j) or (k).*/
+        /* Set the potential at position (i, j) or (k). */
         void setPotentialIJ(int i, int j, double potential);
         void setPotentialK(long k, double potential);
 
