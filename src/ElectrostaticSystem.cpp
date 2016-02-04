@@ -10,7 +10,7 @@ namespace electrostatics {
 
 /* Constructors */
 
-ElectrostaticSystem::ElectrostaticSystem(Eigen::MatrixXd &potentials, int iMin, int jMin) :
+ElectrostaticSystem::ElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin) :
     iMin(iMin), jMin(jMin), potentials(potentials) {
         iMax = iMin + potentials.rows() - 1;
         jMax = jMin + potentials.cols() - 1;
@@ -19,7 +19,7 @@ ElectrostaticSystem::ElectrostaticSystem(Eigen::MatrixXd &potentials, int iMin, 
 
 ElectrostaticSystem::ElectrostaticSystem(int iMin, int iMax, int jMin, int jMax) :
     iMin(iMin), iMax(iMax), jMin(jMin), jMax(jMax) {
-        potentials = Eigen::MatrixXd::Zero(iMax-iMin+1, jMax-jMin+1);
+        potentials = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);
         kMax = ((iMax-iMin+1) * (jMax-jMin+1)) - 1;
 }
 

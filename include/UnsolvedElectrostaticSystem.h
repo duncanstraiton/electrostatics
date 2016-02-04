@@ -27,17 +27,19 @@
 
 namespace electrostatics {
 
+// Matrix to represent a grid of boolean values    
+typedef Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> boolGrid; 
+
 class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
     protected:
-        /* Boolean matrix as described above to mark the positions of the boundary conditions. */
-        Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>  boundaryConditionPositions; 
+        /* Boolean grid to mark the positions of the boundary conditions. */
+        boolGrid boundaryConditionPositions; 
 
     public:
         /* Constructors. */
         UnsolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
-        UnsolvedElectrostaticSystem(Eigen::MatrixXd &potentials,
-                Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> &boundaryConditionPositions,
-                int iMin, int jMin);
+        UnsolvedElectrostaticSystem(doubleGrid &potentials,
+                boolGrid &boundaryConditionPositions, int iMin, int jMin);
 
         
         /* Test if position (i, j) or (k) is a boundary condition. */

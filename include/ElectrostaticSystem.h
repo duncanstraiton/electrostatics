@@ -35,16 +35,19 @@
 
 namespace electrostatics{
 
+// Matrix to represent a grid of doubles    
+typedef Eigen::MatrixXd doubleGrid;
+
 class ElectrostaticSystem {
     protected:
         int iMin, iMax, jMin, jMax;
         long kMax;  // kMax = (iMax - iMin) * (jMax - jMin)  -- It may be very large
-        Eigen::MatrixXd potentials;
+        doubleGrid potentials;
 
     public:
         /* Constructors. */
         ElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
-        ElectrostaticSystem(Eigen::MatrixXd &potentials, int iMin, int jMin);
+        ElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin);
 
 
         /* Get min/max values for i, j, k. kMin is alway 0. */

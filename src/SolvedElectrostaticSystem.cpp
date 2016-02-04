@@ -8,7 +8,7 @@ namespace electrostatics {
 /* Constructors */
 
 SolvedElectrostaticSystem::SolvedElectrostaticSystem(
-        Eigen::MatrixXd &potentials, int iMin, int jMin) :
+        doubleGrid &potentials, int iMin, int jMin) :
     ElectrostaticSystem(potentials, iMin, jMin) {
 }
 

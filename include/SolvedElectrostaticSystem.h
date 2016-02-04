@@ -19,7 +19,7 @@ namespace electrostatics {
 class SolvedElectrostaticSystem : public ElectrostaticSystem{
     public:
         /* Constructors. */
-        SolvedElectrostaticSystem(Eigen::MatrixXd &potentials, int iMin, int jMin);
+        SolvedElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin);
         SolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
 };
 

@@ -9,17 +9,14 @@ namespace electrostatics {
 /* Constructors */
 
 UnsolvedElectrostaticSystem::UnsolvedElectrostaticSystem(
-        Eigen::MatrixXd &potentials,
-        Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> &boundaryConditionPositions,
-        int iMin, int jMin) :
+        doubleGrid &potentials, boolGrid &boundaryConditionPositions, int iMin, int jMin) :
     ElectrostaticSystem(potentials, iMin, jMin),
     boundaryConditionPositions(boundaryConditionPositions) {
 }
 
 UnsolvedElectrostaticSystem::UnsolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax) :
     ElectrostaticSystem(iMin, iMax, jMin, jMax) {
-        boundaryConditionPositions =
-            Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>(potentials.rows(), potentials.cols());
+        boundaryConditionPositions = boolGrid(potentials.rows(), potentials.cols());
         boundaryConditionPositions.fill(false);
 }
 
