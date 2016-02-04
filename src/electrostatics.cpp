@@ -101,7 +101,7 @@ void solveProblem1() {
     // Calculate the absolute value of the difference at each point
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
+            solutionComparison.setPotentialIJ(i, j, abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
                         systemAnalytical.getPotentialIJ(i, j)));
         }
     }
@@ -171,7 +171,7 @@ void solveProblem2() {
     // Calculate the absolute value of the difference at each point
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            solutionComparison.setPotentialIJ(i, j, std::abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
+            solutionComparison.setPotentialIJ(i, j, abs(solvedSystemNumerical.getPotentialIJ(i, j) - 
                         systemAnalytical.getPotentialIJ(i, j)));
         }
     }

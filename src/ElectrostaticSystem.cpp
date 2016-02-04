@@ -58,17 +58,17 @@ long ElectrostaticSystem::ij2k(int i, int j) const {
 
 void ElectrostaticSystem::setPotentialRing(int centreI, int centreJ, double radius, double potential) {
     int iOffset, jOffset;
-    for(iOffset=std::ceil(radius); iOffset>=0; iOffset--) {
+    for(iOffset=ceil(radius); iOffset>=0; iOffset--) {
         if(iOffset > radius) jOffset = 0;
-        else jOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(iOffset,2) ));
+        else jOffset = round(sqrt( pow(radius,2)-pow(iOffset,2) ));
         setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
         setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
         setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
         setPotentialIJ(centreI-iOffset, centreJ-jOffset, potential);
     }
-    for(jOffset=std::ceil(radius); jOffset>=0; jOffset--) {
+    for(jOffset=ceil(radius); jOffset>=0; jOffset--) {
         if(jOffset > radius) iOffset = 0;
-        else iOffset = std::round(std::sqrt( std::pow(radius,2)-std::pow(jOffset,2) ));
+        else iOffset = round(sqrt( pow(radius,2)-pow(jOffset,2) ));
         setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
         setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
         setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
@@ -77,9 +77,9 @@ void ElectrostaticSystem::setPotentialRing(int centreI, int centreJ, double radi
 }
 
 void ElectrostaticSystem::setPotentialCircle(int centreI, int centreJ, double radius, double potential) {
-    for(int i=centreI-std::ceil(radius); i<=centreI+std::ceil(radius); i++) {
-        for(int j=centreJ-std::ceil(radius); j<=centreJ+std::ceil(radius); j++) {
-            if( std::sqrt( std::pow(i,2)+std::pow(j,2) ) <= radius) {
+    for(int i=centreI-ceil(radius); i<=centreI+ceil(radius); i++) {
+        for(int j=centreJ-ceil(radius); j<=centreJ+ceil(radius); j++) {
+            if( sqrt( pow(i,2)+pow(j,2) ) <= radius) {
                 setPotentialIJ(i, j, potential);
             }
         }
