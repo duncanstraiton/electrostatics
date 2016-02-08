@@ -19,7 +19,7 @@ TESTOBJECTS := $(patsubst $(TESTSRCDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRC
 CFLAGS := -std=c++11 -g3 -Wall -fopenmp
 LIB := -fopenmp
 TESTLIB := -lgtest -lgtest_main -pthread
-INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest
+INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/include
 
 $(TARGET): $(OBJECTS) $(MAINENTRYOBJECT) | $(BINDIR)
 	@echo " Linking..."
