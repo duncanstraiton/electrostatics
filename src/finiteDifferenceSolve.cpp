@@ -34,10 +34,10 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
         SolvedElectrostaticSystem &solvedSystem) {
     long kMax = unsolvedSystem.getKMax();
     // Note A could be an int matrix but would need to cast to doubles before solving
-    Eigen::SparseMatrix<double> A(kMax+1, kMax+1); // Dimension kMax+1 as k counts from zero.
+    Eigen::SparseMatrix<double, Eigen::RowMajor> A(kMax+1, kMax+1); // Dimension kMax+1 as k counts from zero.
     Eigen::VectorXd b(kMax+1);  // Boundary values vector
 
-    // Allocate space for A - it wont have more than 5 elements per column
+    // Allocate space for A - it wont have more than 5 elements per row
     A.reserve(Eigen::VectorXi::Constant(kMax+1, 5));
 
     // Fill the matrix A and boundary values vector b
@@ -85,11 +85,11 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
     }
 
     /* Solving the system using the biconjugate gradient stabilised method.
-     * This is totally handled by Eigen. I have no idea how it works.
      *
      * Needs to be a matrix of doubles, wont work for ints (I think).
      */
-    Eigen::BiCGSTAB<Eigen::SparseMatrix<double> > solver;
+    A.makeCompressed();
+    Eigen::BiCGSTAB<Eigen::SparseMatrix<double, Eigen::RowMajor> > solver;
     solver.compute(A);
     Eigen::VectorXd solution = solver.solve(b); // Solve Av = b, v is the solution
 
