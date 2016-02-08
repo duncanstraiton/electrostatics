@@ -139,7 +139,7 @@ void ElectrostaticSystem::compareTo(const ElectrostaticSystem &otherSystem,
 
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<jMax; j++) {
-            comparisonResults.setPotentialIJ(i, j, abs(this->getPotentialIJ(i,j) -
+            comparisonResults.setPotentialIJ(i, j, fabs(this->getPotentialIJ(i,j) -
                         otherSystem.getPotentialIJ(i, j)));
         }
     }
