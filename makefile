@@ -16,7 +16,7 @@ SOURCES := $(shell find $(SRCDIR) -type f \( -iname *.$(SRCEXT) ! -iname $(MAINE
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 TESTSOURCES := $(shell find $(TESTSRCDIR) -type f -name *.$(SRCEXT))
 TESTOBJECTS := $(patsubst $(TESTSRCDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
-CFLAGS := -std=c++11 -g3 -Wall -fopenmp
+CFLAGS := -std=c++11 -g3 -Wall -fopenmp -O3
 LIB := -fopenmp
 TESTLIB := -lgtest -lgtest_main -pthread
 INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/include
