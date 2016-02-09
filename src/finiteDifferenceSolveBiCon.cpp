@@ -1,3 +1,5 @@
+#ifdef biCon
+
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include "finiteDifferenceSolve.h"
@@ -100,3 +102,5 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
 }
 
 } // namespace electrostatics
+
+#endif //biCon

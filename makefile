@@ -21,6 +21,29 @@ LIB := -fopenmp
 TESTLIB := -lgtest -lgtest_main -pthread
 INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/include
 
+
+###############################################################################
+# Seperate targets for different solving methods
+###############################################################################
+.PHONY: all biCon sparseLU
+
+# Make the main program with eigens sparseLU module by default.
+all: sparseLU
+
+# BiConjugate Gradient Stabalised method from eigen.
+# Runs on multiple cores but still slower than sparseLU module.
+biCon: CFLAGS += -DbiCon
+biCon: $(TARGET)
+
+# Eigen's sparse LU module - only able to run on a single core.
+sparseLU: CFLAGS += -DsparseLU
+sparseLU: $(TARGET)
+
+
+
+###############################################################################
+# Targets for main program.
+###############################################################################
 $(TARGET): $(OBJECTS) $(MAINENTRYOBJECT) | $(BINDIR)
 	@echo " Linking..."
 	@echo " $(CC) $^ $(MAINENTRY) -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
@@ -33,6 +56,10 @@ $(BINDIR):
 	@mkdir -p $(BINDIR)
 
 
+
+###############################################################################
+# Targets for google test.
+###############################################################################
 testAll: $(TESTTARGET)
 $(TESTTARGET):  $(OBJECTS) $(TESTOBJECTS) | $(TESTBINDIR)
 	@echo " Linking Tests..."
@@ -46,6 +73,11 @@ $(TESTBINDIR):
 	@mkdir -p $(TESTBINDIR)
 
 
+
+###############################################################################
+# Clean up build files - will also remove any generated data or plots
+# (ie everything) from bin directory.
+###############################################################################
 clean:
 	@echo " Cleaning..."; 
 	@echo " $(RM) -r $(BUILDDIR) $(BINDIR) $(TESTBUILDDIR) $(TESTBINDIR)";
