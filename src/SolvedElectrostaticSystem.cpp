@@ -5,17 +5,13 @@
 #include <fstream>
 #include <cmath>
 #include <string>
+#include <list>
+#include <vector>
 #include "SolvedElectrostaticSystem.h"
 
 namespace electrostatics {
 
 /* Constructors */
-
-SolvedElectrostaticSystem::SolvedElectrostaticSystem(
-        doubleGrid &potentials, int iMin, int jMin) :
-    ElectrostaticSystem(potentials, iMin, jMin) {
-        fieldFound = false;
-}
 
 SolvedElectrostaticSystem::SolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax) :
     ElectrostaticSystem(iMin, iMax, jMin, jMax) {
@@ -26,42 +22,27 @@ SolvedElectrostaticSystem::SolvedElectrostaticSystem(int iMin, int iMax, int jMi
 /* Methods */
 
 void SolvedElectrostaticSystem::findField() {
-    fieldX = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);
-    fieldY = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);
-    field = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);
+    fieldX = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);    // X components of field
+    fieldY = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);    // Y components of field
+    field = doubleGrid::Zero(iMax-iMin+1, jMax-jMin+1);     // Magnitude of field
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-
             // Components in i direction
-            int surroundingPointsX = 0;
-            if(i<iMax) {
-                fieldX(i-iMin, j-jMin) += getPotentialIJ(i+1, j);
-                surroundingPointsX += 1;
-            } else fieldX(i-iMin, j-jMin) += getPotentialIJ(i, j);
-            if(i>iMin) {
-                fieldX(i-iMin, j-jMin) -= getPotentialIJ(i-1, j);
-                surroundingPointsX += 1;
-            } else fieldX(i-iMin, j-jMin) -= getPotentialIJ(i, j);
-            fieldX(i-iMin, j-jMin) /= surroundingPointsX;
+            if(i==iMax) fieldX(i-iMin, j-jMin) = getPotentialIJ(i,j) - getPotentialIJ(i-1,j);
+            else if(i==iMin) fieldX(i-iMin, j-jMin) = getPotentialIJ(i+1,j)  -getPotentialIJ(i,j);
+            else fieldX(i-iMin, j-jMin) = (getPotentialIJ(i+1,j)-getPotentialIJ(i-1,j))/2;
 
             // Components in j direction
-            int surroundingPointsY = 0;
-            if(j<jMax) {
-                fieldY(i-iMin, j-jMin) += getPotentialIJ(i, j+1);
-                surroundingPointsY += 1;
-            } else fieldY(i-iMin, j-jMin) += getPotentialIJ(i, j);
-            if(j>jMin) {
-                fieldY(i-iMin, j-jMin) -= getPotentialIJ(i, j-1);
-                surroundingPointsY += 1;
-            } else fieldY(i-iMin, j-jMin) -= getPotentialIJ(i, j);
-            fieldY(i-iMin, j-jMin) /= surroundingPointsY;
+            if(j==jMax) fieldY(i-iMin, j-jMin) = getPotentialIJ(i,j) - getPotentialIJ(i,j-1);
+            else if(j==jMin) fieldY(i-iMin, j-jMin) = getPotentialIJ(i,j+1)  -getPotentialIJ(i,j);
+            else fieldY(i-iMin, j-jMin) = (getPotentialIJ(i,j+1)-getPotentialIJ(i,j-1))/2;
 
-            field(i-iMin, j-jMin) = sqrt( pow(fieldX(i-iMin, j-jMin),2) + pow(fieldY(i-iMin,j-jMin),2) );
-            if(field(i-iMin, j-jMin) > maxE) maxE = field(i-iMin, j-jMin);
-
-            fieldFound = true;
+            // Full field
+            field(i-iMin, j-jMin) = sqrt( pow(fieldX(i-iMin, j-jMin, 2)) + 
+                    pow(fieldY(i-iMin, j-jMin), 2) );
         }
     }
+    fieldFound = true;
 }
 
 void SolvedElectrostaticSystem::saveFieldGNUPlot(std::string fileName) {

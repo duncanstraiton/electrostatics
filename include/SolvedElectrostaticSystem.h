@@ -22,16 +22,19 @@ class SolvedElectrostaticSystem : public ElectrostaticSystem{
         doubleGrid field;   // Strength of the field
         doubleGrid fieldX;  // Component of field in x direction
         doubleGrid fieldY;  // Component of field in y direction
-        double maxE;        // Max value of electric field
         bool fieldFound;    // True if the field has been found
 
     public:
         /* Constructors */
-        SolvedElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin);
         SolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
 
+
         /* Methods */
+
+        /* Calculates the components of the field and stores them in fieldX and fieldY. */
         void findField();
+
+        /* Saves the magnitude of the field in a file that gnuplot can plot easily. */
         void saveFieldGNUPlot(std::string fileName);
 };
 
