@@ -71,7 +71,7 @@ void UnsolvedElectrostaticSystem::setBoundaryRing(int centreI, int centreJ, doub
 void UnsolvedElectrostaticSystem::setBoundaryCircle(int centreI, int centreJ, double radius, double potential) {
     for(int i=centreI-ceil(radius); i<=centreI+ceil(radius); i++) {
         for(int j=centreJ-ceil(radius); j<=centreJ+ceil(radius); j++) {
-            if(sqrt( pow(i,2)+pow(j,2) ) <=radius) {
+            if(sqrt( pow(i-centreI,2)+pow(j-centreJ,2) ) <=radius) {
                 setBoundaryPoint(i, j, potential);
             }
         }
