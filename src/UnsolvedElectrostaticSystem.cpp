@@ -8,12 +8,6 @@ namespace electrostatics {
 
 /* Constructors */
 
-UnsolvedElectrostaticSystem::UnsolvedElectrostaticSystem(
-        doubleGrid &potentials, boolGrid &boundaryConditionPositions, int iMin, int jMin) :
-    ElectrostaticSystem(potentials, iMin, jMin),
-    boundaryConditionPositions(boundaryConditionPositions) {
-}
-
 UnsolvedElectrostaticSystem::UnsolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax) :
     ElectrostaticSystem(iMin, iMax, jMin, jMax) {
         boundaryConditionPositions = boolGrid(potentials.rows(), potentials.cols());

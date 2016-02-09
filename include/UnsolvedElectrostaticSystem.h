@@ -36,12 +36,12 @@ class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
         boolGrid boundaryConditionPositions; 
 
     public:
-        /* Constructors. */
+        /* Constructor */
         UnsolvedElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
-        UnsolvedElectrostaticSystem(doubleGrid &potentials,
-                boolGrid &boundaryConditionPositions, int iMin, int jMin);
-
         
+
+        /* Methods */
+
         /* Test if position (i, j) or (k) is a boundary condition. */
         bool isBoundaryConditionIJ(int i, int j) const;
         bool isBoundaryConditionK(long k) const;

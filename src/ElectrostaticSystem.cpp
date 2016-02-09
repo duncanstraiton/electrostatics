@@ -8,14 +8,7 @@
 
 namespace electrostatics {
 
-/* Constructors */
-
-ElectrostaticSystem::ElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin) :
-    iMin(iMin), jMin(jMin), potentials(potentials) {
-        iMax = iMin + potentials.rows() - 1;
-        jMax = jMin + potentials.cols() - 1;
-        kMax = ((iMax-iMin+1) * (jMax-jMin+1)) - 1;
-}
+/* Constructor */
 
 ElectrostaticSystem::ElectrostaticSystem(int iMin, int iMax, int jMin, int jMax) :
     iMin(iMin), iMax(iMax), jMin(jMin), jMax(jMax) {

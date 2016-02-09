@@ -45,10 +45,11 @@ class ElectrostaticSystem {
         doubleGrid potentials;
 
     public:
-        /* Constructors. */
+        /* Constructor */
         ElectrostaticSystem(int iMin, int iMax, int jMin, int jMax);
-        ElectrostaticSystem(doubleGrid &potentials, int iMin, int jMin);
 
+
+        /* Methods */
 
         /* Get min/max values for i, j, k. kMin is alway 0. */
         int getIMin() const { return iMin; }
