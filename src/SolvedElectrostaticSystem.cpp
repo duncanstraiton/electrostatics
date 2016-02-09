@@ -38,7 +38,7 @@ void SolvedElectrostaticSystem::findField() {
             else fieldY(i-iMin, j-jMin) = (getPotentialIJ(i,j+1)-getPotentialIJ(i,j-1))/2;
 
             // Full field
-            field(i-iMin, j-jMin) = sqrt( pow(fieldX(i-iMin, j-jMin, 2)) + 
+            field(i-iMin, j-jMin) = sqrt( pow(fieldX(i-iMin, j-jMin), 2) + 
                     pow(fieldY(i-iMin, j-jMin), 2) );
         }
     }
