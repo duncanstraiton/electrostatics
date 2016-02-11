@@ -87,10 +87,7 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
     }
     A.makeCompressed();
 
-    /* Solving the system using the biconjugate gradient stabilised method.
-     *
-     * Needs to be a matrix of doubles, wont work for ints (I think).
-     */
+    // Solving the system using eigens sparseLU module
     Eigen::SparseLU<Eigen::SparseMatrix<double, Eigen::ColMajor> > solver;
     solver.analyzePattern(A);
     solver.factorize(A);

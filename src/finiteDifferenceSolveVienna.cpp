@@ -1,7 +1,13 @@
-#ifdef biCon
+#ifdef Vienna
+
+#define VIENNACL_WITH_EIGEN 1
 
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <viennacl/linalg/bicgstab.hpp>
+#include <viennacl/vector.hpp>
+#include <viennacl/matrix.hpp>
+#include <viennacl/compressed_matrix.hpp>
 #include "finiteDifferenceSolve.h"
 #include "SolvedElectrostaticSystem.h"
 #include "UnsolvedElectrostaticSystem.h"
@@ -30,7 +36,7 @@ namespace electrostatics {
  *
  * Forming a matrix equation of the form  Av = b, where b is the vector of
  * boundary values, and v is the vector of unknown potentials to solve for,
- * and A is the coefficents matrix, the Eigen library is used to solve for v.
+ * and A is the coefficents matrix, the viennacl library is used to solve for v.
  */
 void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
         SolvedElectrostaticSystem &solvedSystem) {
@@ -87,10 +93,19 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
     }
     A.makeCompressed();
 
-    // Solving the system using the biconjugate gradient stabilised method
-    Eigen::BiCGSTAB<Eigen::SparseMatrix<double, Eigen::RowMajor> > solver;
-    solver.compute(A);
-    Eigen::VectorXd solution = solver.solve(b); // Solve Av = b, v is the solution
+    // Make variables for viennacl and copy data to them
+    viennacl::vector<double> vcl_b(kMax+1);
+    viennacl::compressed_matrix<double> vcl_A(kMax+1, kMax+1);
+    viennacl::copy(b, vcl_b);
+    viennacl::copy(A, vcl_A);
+
+    // Make variables for the solution
+    Eigen::VectorXd solution(kMax+1);
+    viennacl::vector<double> vcl_solution(kMax+1);
+
+    // Solving the system using viennacl's bicgstab method
+    vcl_solution = viennacl::linalg::solve(vcl_A, vcl_b, viennacl::linalg::bicgstab_tag());
+    viennacl::copy(vcl_solution, solution);
 
     // Set the potentials in the solved system to the ones just calculated
     for(int k=0; k<=kMax; k++) {
@@ -100,4 +115,4 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
 
 } // namespace electrostatics
 
-#endif //biCon
+#endif // Vienna
