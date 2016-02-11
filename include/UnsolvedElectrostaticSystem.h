@@ -14,9 +14,6 @@
  *
  * would mean that positions 2, 4, 6, 7 and 8 of the potentials are boundary 
  * conditions, while the other positions are unknown points.
- *
- * Note: In actual use all the edge positions of the grid should be 
- * defined as boundary conditions, unlike in the above example.
  */
 
 #ifndef UNSOLVEDELECTROSTATICSYSTEM_H
