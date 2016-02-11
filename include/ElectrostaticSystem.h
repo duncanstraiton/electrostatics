@@ -41,7 +41,7 @@ typedef Eigen::MatrixXd doubleGrid;
 class ElectrostaticSystem {
     protected:
         int iMin, iMax, jMin, jMax;
-        long kMax;  // kMax = (iMax - iMin) * (jMax - jMin)  -- It may be very large
+        long kMax;
         doubleGrid potentials;
 
     public:
@@ -62,27 +62,13 @@ class ElectrostaticSystem {
         int getLengthI() const { return potentials.rows(); }
         int getLengthJ() const { return potentials.cols(); }
 
-
         /* Get the potential at position (i, j) or (k). */
         double getPotentialIJ(int i, int j) const;
         double getPotentialK(long k) const;
 
-
         /* Set the potential at position (i, j) or (k). */
         void setPotentialIJ(int i, int j, double potential);
         void setPotentialK(long k, double potential);
-
-        /* Set the potential for a circle centred at (i, j) with radius r.
-         * Note: This creates a ring only.
-         * For a filled circle use setPotentialCircle() 
-         */
-        void setPotentialRing(int i, int j, double radius, double potential);
-
-        /* Set the potential for a circle centred at (i, j) with radius r.
-         * Note: This creates a filled circle.
-         * For a ring only use setPotentialRing()
-         */
-        void setPotentialCircle(int i, int j, double radius, double potential);
 
 
         /* Convert between (i, j) coordinates and (k) positions. */

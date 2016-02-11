@@ -49,36 +49,6 @@ long ElectrostaticSystem::ij2k(int i, int j) const {
     return i + j*(iMax-iMin+1);
 }
 
-void ElectrostaticSystem::setPotentialRing(int centreI, int centreJ, double radius, double potential) {
-    int iOffset, jOffset;
-    for(iOffset=ceil(radius); iOffset>=0; iOffset--) {
-        if(iOffset > radius) jOffset = 0;
-        else jOffset = round(sqrt( pow(radius,2)-pow(iOffset,2) ));
-        setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
-        setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
-        setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
-        setPotentialIJ(centreI-iOffset, centreJ-jOffset, potential);
-    }
-    for(jOffset=ceil(radius); jOffset>=0; jOffset--) {
-        if(jOffset > radius) iOffset = 0;
-        else iOffset = round(sqrt( pow(radius,2)-pow(jOffset,2) ));
-        setPotentialIJ(centreI+iOffset, centreJ+jOffset, potential);
-        setPotentialIJ(centreI+iOffset, centreJ-jOffset, potential);
-        setPotentialIJ(centreI-iOffset, centreJ+jOffset, potential);
-        setPotentialIJ(centreI-iOffset, centreJ-jOffset, potential);
-    }
-}
-
-void ElectrostaticSystem::setPotentialCircle(int centreI, int centreJ, double radius, double potential) {
-    for(int i=centreI-ceil(radius); i<=centreI+ceil(radius); i++) {
-        for(int j=centreJ-ceil(radius); j<=centreJ+ceil(radius); j++) {
-            if( sqrt( pow(i,2)+pow(j,2) ) <= radius) {
-                setPotentialIJ(i, j, potential);
-            }
-        }
-    }
-}
-
 int* ElectrostaticSystem::k2ij(long k) const {
     if(k>kMax || k<0) throw std::out_of_range(
             "Error: Trying to convert to position (k)  out of range!");
@@ -128,11 +98,5 @@ void ElectrostaticSystem::compareTo(const ElectrostaticSystem &otherSystem,
         }
     }
 }
-
-
-
-
-
-
 
 } // namespace electrostatics
