@@ -92,13 +92,10 @@ class ElectrostaticSystem {
         /* Print out the system potentials in the grid form described above. */
         void print() const;
 
-        /* Print the system potentials in the correct format to plot with gnuplot. */
-        void printGNUPlot() const;
-
         /* Save a file with the specified name containing the system potentials in the 
          * correct format for using with GNU Plot.
          */
-        void saveFileGNUPlot(std::string fileName) const;
+        void saveFile(std::string fileName) const;
 
         /* Compare this system to otherSystem. Stores the absoulte difference in the relevant
          * position of comparisonResults.

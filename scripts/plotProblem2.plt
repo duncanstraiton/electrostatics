@@ -1,33 +1,27 @@
 #!/usr/bin/gnuplot -persist
+load '../scripts/colormap.pal'
 set size ratio -1
 set term postscript color
 set pm3d map
+set xlabel "i"
+set ylabel "j"
+set nokey
+
+xMin = -250
+yMin = -250
+set xrange [-250 : 250];
+set yrange [-250 : 250];
+
 set output "numericalProblem2.eps"
-set xlabel "i"
-set ylabel "j"
 set title "Numerical solution for problem 2"
-set xrange [-50 : 50];
-set yrange [-50 : 50];
-splot "../bin/numericalProblem2"
+splot "../bin/numericalProblem2" using ($1+xMin):($2+yMin):3 matrix
 
-set size ratio -1
-set term postscript color
-set pm3d map
 set output "analyticalProblem2.eps"
-set xlabel "i"
-set ylabel "j"
 set title "Analytical solution for problem 2"
-set xrange [-50 : 50];
-set yrange [-50 : 50];
-splot "../bin/analyticalProblem2"
+splot "../bin/analyticalProblem2" using ($1+xMin):($2+yMin):3 matrix
 
-set size ratio -1
-set term postscript color
-set pm3d map
+
 set output "differenceProblem2.eps"
-set xlabel "i"
-set ylabel "j"
 set title "Difference between solutions for problem 2"
-set xrange [-50 : 50];
-set yrange [-50 : 50];
-splot "../bin/differenceProblem2"
+splot "../bin/differenceProblem2" using ($1+xMin):($2+yMin):3 matrix
+

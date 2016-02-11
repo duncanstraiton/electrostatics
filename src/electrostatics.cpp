@@ -80,7 +80,7 @@ void solveProblem1() {
 
     electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
-    solvedSystemNumerical.saveFileGNUPlot("numericalProblem1");
+    solvedSystemNumerical.saveFile("numericalProblem1");
 
 
     // Analytical solution
@@ -93,13 +93,13 @@ void solveProblem1() {
                     electrostatics::analyticalProblem1(i, j, radiusA, radiusB, potentialA, potentialB));
         }
     }
-    systemAnalytical.saveFileGNUPlot("analyticalProblem1");
+    systemAnalytical.saveFile("analyticalProblem1");
 
 
     // Difference between analytical and numerical solutions
     electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
     solvedSystemNumerical.compareTo(systemAnalytical, solutionComparison);
-    solutionComparison.saveFileGNUPlot("differenceProblem1");
+    solutionComparison.saveFile("differenceProblem1");
 }
 
 
@@ -146,7 +146,7 @@ void solveProblem2() {
 
     electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
-    solvedSystemNumerical.saveFileGNUPlot("numericalProblem2");
+    solvedSystemNumerical.saveFile("numericalProblem2");
 
     // Analytical solution
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
@@ -159,11 +159,11 @@ void solveProblem2() {
                     electrostatics::analyticalProblem2(i, j, cylinderRadius, uniformField));
         }
     }
-    systemAnalytical.saveFileGNUPlot("analyticalProblem2");
+    systemAnalytical.saveFile("analyticalProblem2");
 
 
     // Difference between analytical and numerical solutions
     electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
     solvedSystemNumerical.compareTo(systemAnalytical, solutionComparison);
-    solutionComparison.saveFileGNUPlot("differenceProblem2");
+    solutionComparison.saveFile("differenceProblem2");
 }

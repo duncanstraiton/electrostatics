@@ -97,21 +97,12 @@ void ElectrostaticSystem::print() const {
     std::cout << potentials.transpose().colwise().reverse();
 }
 
-void ElectrostaticSystem::printGNUPlot() const {
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            std::cout << i << " " << j << " " << getPotentialIJ(i, j) << "\n";
-        }
-        std::cout << "\n";
-    }
-}
-
-void ElectrostaticSystem::saveFileGNUPlot(std::string fileName) const {
+void ElectrostaticSystem::saveFile(std::string fileName) const {
     std::ofstream outputFile;
     outputFile.open(fileName.c_str());
-    for(int i=iMin; i<=iMax; i++) {
-        for(int j=jMin; j<=jMax; j++) {
-            outputFile << i << " " << j << " " << getPotentialIJ(i, j) << "\n";
+    for(int j=jMin; j<=jMax; j++) {
+        for(int i=iMin; i<=iMax; i++) {
+            outputFile << getPotentialIJ(i, j) << " ";
         }
         outputFile << "\n";
     }
