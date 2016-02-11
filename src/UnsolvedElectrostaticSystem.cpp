@@ -144,4 +144,12 @@ void UnsolvedElectrostaticSystem::setBottomBoundary(double potential) {
     setBoundaryLine(iMin, jMin, iMax, jMin, potential);
 }
 
+void UnsolvedElectrostaticSystem::setBoundaryRectangle(int left, int right,
+        int top, int bottom, double potential) {
+    setBoundaryLine(left, top, right, top, potential);
+    setBoundaryLine(left, bottom, right, bottom, potential);
+    setBoundaryLine(left, bottom, left, top, potential);
+    setBoundaryLine(right, bottom, right, top, potential);
+}
+
 } // namespace electrostatics

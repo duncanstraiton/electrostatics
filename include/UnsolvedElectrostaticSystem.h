@@ -71,6 +71,14 @@ class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
         void setTopBoundary(double potential);
         void setBottomBoundary(double potential);
 
+        /* Set a rectangle as a boundary condition.
+         * Top left point: (left, top).
+         * Bottom left point: (left, bottom).
+         * Top right point: (right, top).
+         * Bottom right point: (right, bottom).
+         * NOTE: Rectange is not filled!
+         */
+        void setBoundaryRectangle(int left, int right, int top, int bottom, double potential);
 };
 
 } // namespace electrostatics
