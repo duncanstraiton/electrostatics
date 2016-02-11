@@ -61,6 +61,16 @@ class UnsolvedElectrostaticSystem : public ElectrostaticSystem{
          * For a ring only use setBoundaryRing()
          */
         void setBoundaryCircle(int centreI, int centreJ, double radius, double potential);
+
+        /* Set a line as a boundary condition - from (i1,j1) to (i2,j2). */
+        void setBoundaryLine(int i1, int j1, int i2, int j2, double potential);
+
+        /* Set the edges of the system as a boundary conditions. */
+        void setLeftBoundary(double potential);
+        void setRightBoundary(double potential);
+        void setTopBoundary(double potential);
+        void setBottomBoundary(double potential);
+
 };
 
 } // namespace electrostatics

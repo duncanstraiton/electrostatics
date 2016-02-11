@@ -85,8 +85,6 @@ void solveProblem1() {
 
     // Analytical solution
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
-    // Calculate the potential at each point using the analytical solution
-    systemAnalytical.setPotentialCircle(0, 0, radiusA, potentialA);
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
             systemAnalytical.setPotentialIJ(i, j,
@@ -125,9 +123,6 @@ void solveProblem2() {
     double rightPotential;
     std::cout << "Enter radius for cylinder: ";
     std::cin >> cylinderRadius;
-    // std::cout << "Enter potential for cylinder: ";
-    // std::cin >> cylinderPotential; 
-    // Cylinder potential has to be 0!
     cylinderPotential = 0;
     std::cout << "Enter potential for left plate: ";
     std::cin >> leftPotential;
@@ -139,10 +134,8 @@ void solveProblem2() {
     // Setup the unsolved system with the boundary conditions, and then solve it
     electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
     unsolvedSystem.setBoundaryCircle(0, 0, cylinderRadius, cylinderPotential);
-    for(int j=jMin; j<=jMax; j++) {
-        unsolvedSystem.setBoundaryPoint(iMin, j, leftPotential);
-        unsolvedSystem.setBoundaryPoint(iMax, j, rightPotential);
-    }
+    unsolvedSystem.setLeftBoundary(leftPotential);
+    unsolvedSystem.setRightBoundary(rightPotential);
 
     electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
@@ -151,7 +144,6 @@ void solveProblem2() {
     // Analytical solution
     electrostatics::SolvedElectrostaticSystem systemAnalytical(iMin, iMax, jMin, jMax);
     // Calculate the potential at each point using the analytical solution
-    systemAnalytical.setPotentialCircle(0, 0, cylinderRadius, cylinderPotential);
     double uniformField =electrostatics::uniformField(iMin, iMax, leftPotential, rightPotential);
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
