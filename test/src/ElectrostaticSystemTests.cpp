@@ -68,22 +68,3 @@ TEST_F(ElectrostaticSystemTest, SetAndGetPotential2) {
     system->setPotentialK(16, potential);
     ASSERT_EQ(potential, system->getPotentialIJ(ij[0], ij[1]));
 }
-
-TEST(ElectrostaticSystemTestMatrixConstructor, MatrixConstructor) {
-    int iMin = -3;
-    int jMin = 4;
-    Eigen::MatrixXd potentialsMatrix = Eigen::MatrixXd::Zero(4, 3);
-    potentialsMatrix << 1, 2, 3,
-                        4, 5, 6,
-                        7, 8, 9,
-                        10, 11, 12;
-    electrostatics::ElectrostaticSystem system = electrostatics::ElectrostaticSystem(
-            potentialsMatrix, iMin, jMin);
-    ASSERT_EQ(-3, system.getIMin());
-    ASSERT_EQ(4, system.getJMin());
-    ASSERT_EQ(0, system.getIMax());
-    ASSERT_EQ(6, system.getJMax());
-    ASSERT_EQ(11, system.getKMax());
-    ASSERT_EQ(2, system.getPotentialIJ(0+iMin, 1+jMin));
-    ASSERT_EQ(3, system.getPotentialK(8));
-}

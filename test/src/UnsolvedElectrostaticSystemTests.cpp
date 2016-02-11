@@ -40,34 +40,3 @@ TEST_F(UnsolvedElectrostaticSystemTest, IsAndSetBoundary2) {
     ASSERT_EQ(true, system->isBoundaryConditionIJ(ij[0], ij[1]));
     ASSERT_EQ(false, system->isBoundaryConditionK(10));
 }
-
-
-TEST(UnsolvedElectrostaticSystemTestMatrixConstructor, MatrixConstructor) {
-    int iMin = -3;
-    int jMin = 4;
-
-    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> boundaryConditionPositionsMatrix =
-        Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>(3, 3);
-    boundaryConditionPositionsMatrix.fill(false);
-    boundaryConditionPositionsMatrix << true,  false, true,
-                                  false, false, true,
-                                  true,  true,  false;
-
-    Eigen::MatrixXd potentialsMatrix = Eigen::MatrixXd::Zero(3, 3);
-    potentialsMatrix << 1, 2, 3,
-                        4, 5, 6,
-                        7, 8, 9;
-
-    electrostatics::UnsolvedElectrostaticSystem system = electrostatics::UnsolvedElectrostaticSystem(
-            potentialsMatrix, boundaryConditionPositionsMatrix, iMin, jMin);
-    ASSERT_EQ(-3, system.getIMin());
-    ASSERT_EQ(4, system.getJMin());
-    ASSERT_EQ(-1, system.getIMax());
-    ASSERT_EQ(6, system.getJMax());
-    ASSERT_EQ(8, system.getKMax());
-    ASSERT_EQ(2, system.getPotentialIJ(0+iMin, 1+jMin));
-    ASSERT_EQ(9, system.getPotentialK(8));
-    ASSERT_EQ(false, system.isBoundaryConditionIJ(0+iMin, 1+jMin));
-    ASSERT_EQ(false, system.isBoundaryConditionK(8));
-    ASSERT_EQ(true, system.isBoundaryConditionK(0));
-}
