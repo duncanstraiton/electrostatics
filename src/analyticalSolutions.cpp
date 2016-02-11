@@ -18,8 +18,8 @@ double analyticalProblem1(int i, int j, double radiusA, double radiusB, double p
 
 double analyticalProblem2(int i, int j, double cylinderRadius, double uniformField) {
     double radius = sqrt(pow(i, 2) + pow(j, 2));
-    double theta = (i==0)? M_PI/2 : atan((double)j/i);
     if(radius > cylinderRadius) {
+        double theta = (i==0)? M_PI/2 : atan((double)j/i);
         return ((i>=0)? 1 : -1) * uniformField * cos(theta) * ((pow(cylinderRadius, 2) / radius) - radius);
     }
     else {
