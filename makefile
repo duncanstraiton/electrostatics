@@ -32,8 +32,8 @@ INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/inclu
 all: sparseLU
 
 # Iteratitive finite difference method
-biCon: CFLAGS += -DIFiniteDiff
-biCon: $(TARGET)
+IFD: CFLAGS += -DIFiniteDiff
+IFD: $(TARGET)
 
 # BiConjugate Gradient Stabalised method from eigen.
 # Runs on multiple cores but still slower than sparseLU module.
