@@ -51,7 +51,7 @@ void SolvedElectrostaticSystem::saveFieldGNUPlot(std::string fileName) {
     outputFile.open(fileName.c_str());
     for(int i=iMin; i<=iMax; i++) {
         for(int j=jMin; j<=jMax; j++) {
-            outputFile << i << " " << j << " " << field(i-iMin, j-jMin) << "\n";
+            outputFile << i << " " << j << " " << fieldX(i-iMin, j-jMin) << " " << fieldY(i-iMin, j-jMin) <<"\n";
         }
         outputFile << "\n";
     }

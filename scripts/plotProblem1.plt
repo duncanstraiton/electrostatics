@@ -23,3 +23,9 @@ splot "../bin/analyticalProblem1" using ($1+xMin):($2+yMin):3 matrix
 set output "differenceProblem1.eps"
 set title "Difference between analytical and numerical solutions for problem 1"
 splot "../bin/differenceProblem1" using ($1+xMin):($2+yMin):3 matrix
+
+set output "numericalFieldProblem1.eps"
+set title "Numerical field for problem 1"
+set parametric;
+set isosamples 100,100
+plot "../bin/numericalFieldProblem1" every 10:10 using 1:2:($3*40):($4*40) with vectors

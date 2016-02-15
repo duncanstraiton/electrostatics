@@ -81,6 +81,7 @@ void solveProblem1() {
     electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
     electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
     solvedSystemNumerical.saveFile("numericalProblem1");
+    solvedSystemNumerical.saveFieldGNUPlot("numericalFieldProblem1");
 
 
     // Analytical solution
