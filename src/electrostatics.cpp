@@ -3,12 +3,16 @@
 #include "SolvedElectrostaticSystem.h"
 #include "UnsolvedElectrostaticSystem.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <cmath>
+using namespace std;
 
 //double problem1analytical();
 //double problem2analytical();
 void solveProblem1();
 void solveProblem2();
+void solveProblem3();
 
 /* Currently asks the user to select problem 1 or 2 and to input the relevant paramters.
  * The output (plot data for the analytical solution, plot data for the numerical solution, 
@@ -23,7 +27,8 @@ int main() {
     std::cout << "\nWhich system would you like to generate plot data for?\n" <<
         "1. The system with the two concentical cylinders.\n" <<
         "2. The system with the cylinder between two plates.\n" <<
-        "Enter '1' or '2': ";
+        "3. The Multi-wire proportional Chamber. \n" <<
+        "Enter '1', '2' or '3': ";
     std::cin >> problemNumber;
     std::cout << "\n";
 
@@ -33,6 +38,9 @@ int main() {
             break;
         case 2:
             solveProblem2();
+            break;
+        case 3:
+            solveProblem3();
             break;
     }
     std::cout << "\n";
@@ -158,4 +166,80 @@ void solveProblem2() {
     electrostatics::SolvedElectrostaticSystem solutionComparison(iMin, iMax, jMin, jMax);
     solvedSystemNumerical.compareTo(systemAnalytical, solutionComparison);
     solutionComparison.saveFile("differenceProblem2");
+}
+
+void solveProblem3() {
+    // Get the dimensions of the problem
+    int iMin;
+    int iMax;
+    int jMin;
+    int jMax;
+    std::cout <<"Enter minimum value for i: ";
+    std::cin >> iMin;
+    std::cout <<"Enter maximum value for i: ";
+    std::cin >> iMax;
+    std::cout <<"Enter minimum value for j: ";
+    std::cin >> jMin;
+    std::cout << "Enter maximum value for j: ";
+    std::cin >> jMax;
+
+    // Get the necessary parameters
+    double cylinderRadius;
+    double cylinderPotential;
+    double topPotential;
+    double bottomPotential;
+    double cylinderSpacing;
+    int numCylinder;
+    std::cout << "Enter radii for the wires: ";
+    std::cin >> cylinderRadius;
+    cylinderPotential = 0;
+    std::cout << "Enter the total number of wires: ";
+    std::cin >> numCylinder;
+    std::cout << "Enter the spacing between the wires: ";
+    std::cin >> cylinderSpacing;
+    std::cout << "Enter potential for the top  plate: ";
+    std::cin >> topPotential;
+    std::cout << "Enter potential for the bottom plate: ";
+    std::cin >> bottomPotential;
+
+    // Numerical Solution
+    // Setup the unsolved system with the boundary conditions, and then solve it
+    electrostatics::UnsolvedElectrostaticSystem unsolvedSystem(iMin, iMax, jMin, jMax);
+    unsolvedSystem.setBoundaryCircle(0, 0, cylinderRadius, cylinderPotential);
+    for (int k = 0; k < (numCylinder-1)/2; k++){
+      unsolvedSystem.setBoundaryCircle(cylinderSpacing, 0, cylinderRadius, cylinderPotential);
+      unsolvedSystem.setBoundaryCircle(-cylinderSpacing, 0, cylinderRadius, cylinderPotential);
+      cylinderSpacing += cylinderSpacing;
+    }
+    unsolvedSystem.setTopBoundary(topPotential);
+    unsolvedSystem.setBottomBoundary(bottomPotential);
+
+    electrostatics::SolvedElectrostaticSystem solvedSystemNumerical(iMin, iMax, jMin, jMax);
+    electrostatics::finiteDifferenceSolve(unsolvedSystem, solvedSystemNumerical);
+    solvedSystemNumerical.saveFile("numericalProblem3");
+
+    //Edit GNUPlot file to handle user-set range and problem number
+    ofstream plotfile("../scripts/plotProblemGeneric.plt");
+    if (plotfile.is_open())
+      {
+	plotfile << "#!/usr/bin/gnuplot -persist \n";
+	plotfile << "load '../scripts/colormap.pal' \n";
+	plotfile << "set size ratio -1 \n";
+	plotfile << "set term postscript color \n";
+	plotfile << "set pm3d map \n";
+	plotfile << "set xlabel \"i\" \n ";
+	plotfile << "set ylabel \"j\" \n";
+	plotfile << "set nokey \n";
+
+	plotfile << "xMin = " << iMin << " \n";
+	plotfile << "yMin = " << jMin << " \n";
+	plotfile << "set xrange [" << iMin << ":" << iMax <<"]\n";
+	plotfile << "set yrange [" << jMin << ":" << jMax <<"]\n";
+
+	plotfile << "set output \"numericalProblemGeneric.eps\"\n";
+	plotfile << "set title \" Numerical Solution for Problem Generic\"\n";
+	plotfile << "splot \"../bin/numericalProblem3\" using ($1 +xMin):($2+yMin):3 matrix \n";
+	plotfile.close();
+}
+
 }
