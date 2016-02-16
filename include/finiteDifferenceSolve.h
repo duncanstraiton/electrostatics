@@ -12,8 +12,17 @@ namespace electrostatics {
  * The result is saved in the SolvedElectrostaticsSystem which is also passed
  * to the finction.
  */
-void finiteDifferenceSolve(UnsolvedElectrostaticSystem &unsolvedSystemi, 
+
+#ifdef IFiniteDiff
+void finiteDifferenceSolve(UnsolvedElectrostaticSystem &unsolvedSystem, 
+        SolvedElectrostaticSystem &solvedSystem, int maxIterations=10000);
+#endif // IFiniteDiff
+
+#ifndef IFiniteDiff
+void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem, 
         SolvedElectrostaticSystem &solvedSystem);
+#endif // Not IFiniteDiff
 
 } // namespace electrostatics
+
 #endif
