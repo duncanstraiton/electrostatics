@@ -25,3 +25,11 @@ set output "differenceProblem2.eps"
 set title "Difference between solutions for problem 2"
 splot "../bin/differenceProblem2" using ($1+xMin):($2+yMin):3 matrix
 
+set output "numericalProblem2Contour.eps"
+set title "Numerical equipotentials for problem 2"
+set isosamples 21, 21
+set contour surface
+set cntrparam levels auto 10
+set style data lines
+splot "../bin/numericalProblem2" using ($1+xMin):($2+yMin):3 matrix with lines nosurf lw 3
+
