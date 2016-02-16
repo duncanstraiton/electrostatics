@@ -20,10 +20,15 @@ set output "analyticalProblem2.eps"
 set title "Analytical solution for problem 2"
 splot "../bin/analyticalProblem2" using ($1+xMin):($2+yMin):3 matrix
 
-
 set output "differenceProblem2.eps"
 set title "Difference between solutions for problem 2"
 splot "../bin/differenceProblem2" using ($1+xMin):($2+yMin):3 matrix
+
+set output "numericalFieldProblem2.eps"
+set title "Numerical field for problem 1"
+set parametric;
+set isosamples 100,100
+plot "../bin/numericalFieldProblem2" every 20:20 using 1:2:($3*40):($4*40) with vectors
 
 set output "numericalProblem2Contour.eps"
 set title "Numerical equipotentials for problem 2"

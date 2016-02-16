@@ -28,7 +28,7 @@ set output "numericalFieldProblem1.eps"
 set title "Numerical field for problem 1"
 set parametric;
 set isosamples 100,100
-plot "../bin/numericalFieldProblem1" every 10:10 using 1:2:($3*40):($4*40) with vectors
+plot "../bin/numericalFieldProblem1" every 20:20 using 1:2:($3*40):($4*40) with vectors
 
 set output "numericalProblem1Contour.eps"
 set title "Numerical equipotentials for problem 1"
