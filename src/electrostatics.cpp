@@ -146,6 +146,9 @@ int main(int argc, char* argv[]) {
             systems.at(splitLine[1]).solved.compareTo(systems.at(splitLine[2]).solved, comparisonResult);
             comparisonResult.saveFile(splitLine[3]);
         }
+        else if(splitLine[0] == "savefield") {
+            systems.at(splitLine[1]).solved.saveFieldGNUPlot(splitLine[2]);
+        }
     }
     configFile.close();
 }
