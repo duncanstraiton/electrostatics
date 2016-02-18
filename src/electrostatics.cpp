@@ -5,12 +5,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cmath>
-#include <stdexcept>
+#include <cmath>  // Not needed?
 #include <utility>
 #include <sstream>
 #include <unordered_map>
-#include <cstdlib> // is this needed?
+#include <cstdlib>
 
 void processLine(std::string &line, std::vector<std::string> &splitLine);
 
