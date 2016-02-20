@@ -1,5 +1,5 @@
-#ifndef FINITEDIFFERENCESOLVE_H
-#define FINITEDIFFERENCESOLVE_H
+#ifndef FINITEDIFFITERATIVE_H
+#define FINITEDIFFITERATIVE_H
 
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -13,15 +13,8 @@ namespace electrostatics {
  * to the finction.
  */
 
-#ifdef IFiniteDiff
-void finiteDifferenceSolve(UnsolvedElectrostaticSystem &unsolvedSystem, 
+void finiteDiffIterative(const UnsolvedElectrostaticSystem &unsolvedSystem, 
         SolvedElectrostaticSystem &solvedSystem, int maxIterations=10000);
-#endif // IFiniteDiff
-
-#ifndef IFiniteDiff
-void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem, 
-        SolvedElectrostaticSystem &solvedSystem);
-#endif // Not IFiniteDiff
 
 } // namespace electrostatics
 

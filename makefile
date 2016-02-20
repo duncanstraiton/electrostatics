@@ -24,29 +24,16 @@ INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/inclu
 
 
 ###############################################################################
-# Seperate targets for different solving methods
+# Seperate targets for different vienna backends - default is openMP
 ###############################################################################
-.PHONY: all biCon sparseLU
+.PHONY: all default
 
 # Make the main program with eigens sparseLU module by default.
-all: sparseLU
+all: $(TARGET)
 
-# Iteratitive finite difference method
-IFD: CFLAGS += -DIFiniteDiff
-IFD: $(TARGET)
-
-# BiConjugate Gradient Stabalised method from eigen.
-# Runs on multiple cores but still slower than sparseLU module.
-biCon: CFLAGS += -DbiCon
-biCon: $(TARGET)
-
-# Eigen's sparse LU module
-sparseLU: CFLAGS += -DsparseLU
-sparseLU: $(TARGET)
-
-# ViennaCL
-Vienna: CFLAGS += -DVienna -DVIENNACL_WITH_OPENMP
-Vienna: $(TARGET)
+# Compile with support for openMP multi-threading
+openMP: CFLAGS += -DVIENNACL_WITH_OPENMP
+openMP: $(TARGET)
 
 
 

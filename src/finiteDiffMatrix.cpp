@@ -1,8 +1,13 @@
-#ifdef biCon
+#define VIENNACL_WITH_EIGEN 1
 
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include "finiteDifferenceSolve.h"
+#include <viennacl/linalg/bicgstab.hpp>
+#include <viennacl/vector.hpp>
+#include <viennacl/matrix.hpp>
+#include <viennacl/compressed_matrix.hpp>
+#include <string>
+#include "finiteDiffMatrix.h"
 #include "SolvedElectrostaticSystem.h"
 #include "UnsolvedElectrostaticSystem.h"
 
@@ -15,9 +20,6 @@ namespace electrostatics {
  * this function it would not exist after the function returns - 
  * It would be a local variable - can't return a pointer to a local variable
  *
- * There may be a better way of doing this - something to look into.
- *
- *
  * The function works by using the formula:
  * P(i, j+1) + P(i, j-1) + P(i+1, j) + P(i-1, j) - 4*P(i, j) = 0
  * where P(i, j) is the potential at point (i, j).
@@ -25,18 +27,28 @@ namespace electrostatics {
  * A system of simultaneous linear equations is formed by applying this formula
  * to every grid point that is not a boundary condition.
  *
- * For each boundary condition another formula is added to the system of the form
+ * For each boundary condition another equation is added to the system of the form
  * P(i, j) = The specified potential
  *
  * Forming a matrix equation of the form  Av = b, where b is the vector of
  * boundary values, and v is the vector of unknown potentials to solve for,
- * and A is the coefficents matrix, the Eigen library is used to solve for v.
+ * and A is the coefficents matrix, the Eigen or ViennaCL library is then
+ * used to solve the system as specified by the function call.
  */
-void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
-        SolvedElectrostaticSystem &solvedSystem) {
+void finiteDiffMatrix(const UnsolvedElectrostaticSystem &unsolvedSystem,
+        SolvedElectrostaticSystem &solvedSystem, std::string method) {
+
     long kMax = unsolvedSystem.getKMax();
-    // Note A could be an int matrix but would need to cast to doubles before solving
-    Eigen::SparseMatrix<double, Eigen::RowMajor> A(kMax+1, kMax+1); // Dimension kMax+1 as k counts from zero.
+    Eigen::SparseMatrix<double> A;
+
+    // Dimension kMax+1 as k counts from zero
+    // Sparse Lu solve method needs column major storage, others need row major
+    if(method == "eigensparselu") {
+        A = Eigen::SparseMatrix<double, Eigen::ColMajor>(kMax+1, kMax+1);
+    } else {
+        A = Eigen::SparseMatrix<double, Eigen::RowMajor>(kMax+1, kMax+1);
+    }
+
     Eigen::VectorXd b(kMax+1);  // Boundary values vector
 
     // Allocate space for A - it wont have more than 5 elements per row
@@ -77,7 +89,7 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
                     A.insert(k, k+unsolvedSystem.getLengthI()) = 1;
                     surroundingPoints += 1;
                 }
-                if(k>unsolvedSystem.getLengthI()) {
+                if(j>unsolvedSystem.getJMin()) {
                     A.insert(k, k-unsolvedSystem.getLengthI()) = 1;
                     surroundingPoints += 1;
                 }
@@ -87,10 +99,30 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
     }
     A.makeCompressed();
 
-    // Solving the system using the biconjugate gradient stabilised method
-    Eigen::BiCGSTAB<Eigen::SparseMatrix<double, Eigen::RowMajor> > solver;
-    solver.compute(A);
-    Eigen::VectorXd solution = solver.solve(b); // Solve Av = b, v is the solution
+    Eigen::VectorXd solution(kMax+1); // Eigen vector to hold the solution
+    if(method == "eigenbicon") {
+        Eigen::BiCGSTAB<Eigen::SparseMatrix<double, Eigen::RowMajor> > solver;
+        solver.compute(A);
+        solution = solver.solve(b);
+    }
+    else if(method == "eigensparselu") {
+        Eigen::SparseLU<Eigen::SparseMatrix<double, Eigen::ColMajor> > solver;
+        solver.analyzePattern(A);
+        solver.factorize(A);
+        solution = solver.solve(b);
+    }
+    else if(method == "viennabicon") {
+        // Make variables for viennacl and copy data to them
+        viennacl::vector<double> vcl_b(kMax+1);
+        viennacl::compressed_matrix<double> vcl_A(kMax+1, kMax+1);
+        viennacl::copy(b, vcl_b);
+        viennacl::copy(A, vcl_A);
+        // Make ViennaCL vector variable for the solution
+        viennacl::vector<double> vcl_solution(kMax+1);
+        // Solve the system using viennacl's bicgstab method and copy back to eigen vector
+        vcl_solution = viennacl::linalg::solve(vcl_A, vcl_b, viennacl::linalg::bicgstab_tag());
+        viennacl::copy(vcl_solution, solution);
+    }
 
     // Set the potentials in the solved system to the ones just calculated
     for(int k=0; k<=kMax; k++) {
@@ -99,5 +131,3 @@ void finiteDifferenceSolve(const UnsolvedElectrostaticSystem &unsolvedSystem,
 }
 
 } // namespace electrostatics
-
-#endif //biCon
