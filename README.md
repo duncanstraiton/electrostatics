@@ -65,7 +65,7 @@ circle centreX centreY radius potential
 line x1 y1 x2 y2 potential
 ```
 
-#### Plates
+##### Plates
 Sets the potential for a plate at the specified edge of the system.
 ```
 left potential
@@ -171,7 +171,7 @@ plot systemname
 
 ##### Plot with field arrows
 The system and field must be saved with savesolution and savefield first.
-``
+```
 fieldplot systemname
 ```
 
