@@ -107,17 +107,21 @@ solveviennabicon unsolved solved
 ##### Iterative method
 An iterative method simmilar to that used for heat flow over time with a specified number of iterations.
 ```
-# Solves the unsolved system called unsolved storing the result in a new solved system called solved with 1000 iterations
+# Solves the unsolved system called unsolved storing the result in a new
+# solved system called solved with 1000 iterations
 solveiterative unsolved solved 1000
 ```
 
 #### Analytical solutions
 Analytics solutions for the first and second problems are hard coded into the program.
 ```
-# The analytical solution for problem 1, stored in a solved system called p1analytical with grid size as above and inner cylinder radius 20, outer ring radius 90, inner cylinder potential 0, outer ring potential 100
+# The analytical solution for problem 1, stored in a solved system called
+# p1analytical with grid size as above and inner cylinder radius 20,
+# outer ring radius 90, inner cylinder potential 0, outer ring potential 100
 analytical1 p1analytical -300 300 -100 100 20 90 0 100
 
-# As above for problem 2 with a left plate voltage of 50, right plate at -50 and cylinder radius 90 (always at 0V)
+# As above for problem 2 with a left plate voltage of 50, right plate at -50
+# and cylinder radius 90 (always at 0V)
 analytical2 p2analytical -300 300 -100 100 50 -50 90
 ```
 
