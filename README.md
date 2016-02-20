@@ -20,23 +20,24 @@ The src folder is for all c++ source files. These should all have the file exten
 ##### test
 Contains a src folder which contains the tests for the program. Running make testAll also generates a build and bin directory here, with the test executable in the test/bin directory.
 
-##### scripts
-Contains useful scripts eg to plot data with gnuplot.
+##### cfg
+Contains the config files that specify the problems to solve.
 
 
 
 ### Compiling and Running
 
-To compile and run the program you must have g++, make and eigen installed. Eigen is the library used to provide matrices. To compile the unit tests you must install the Google Test framework. The installation commands below should work on Debian based linux distributions such as Ubuntu, Mint etc.
+To compile and run the program you must have g++, make, ViennaCL and Eigen installed. Eigen is the library used to provide matrices. There are options to solve the matrices with either Eigen of ViennaCL.  To compile the unit tests you must install the Google Test framework. Gnuplot is needed to generate the .eps plots. The installation commands below should work on Debian based linux distributions such as Ubuntu, Mint etc. 
 
 ##### Installing g++ and make
 ```bash
 sudo apt-get install g++ make
 ```
 
-##### Installing Eigen
+##### Installing Eigen, ViennaCL and Gnuplot
+NOTE: Using the latest version of ViennaCL from their website caused problems, but the version installed by apt-get seems to work fine!
 ```bash
-sudo apt-get install libeigen3-dev
+sudo apt-get install libeigen3-dev libviennalcl-dev gnuplot
 ```
 
 ##### Installing Google Test
@@ -60,17 +61,17 @@ test/bin/testAll
 ```
 
 ##### Compiling
-In the root directory of the project run make. This will generate the object files in the build directory, and the output executable in the bin directory
+In the root directory of the project run make -j. This will generate the object files in the build directory, and the output executable in the bin directory. To complie with multicore support run make openMP -j. The -j tells make to use multiple threads when compiling, which saves a lot of time.
 ```bash
-make
+make -j
 ```
 
 ##### Running the Program
-The main funtion of the program currently solves the first and second problems in the project description and outputs data to plot the numerical solution, analytical solution and the difference between the two solutions. It also outputs data to plot the numerical solution for the second problem, but not the analytical solution as this has not been found yet. To solve and generate all the plots for the first problem, do the following (it is best to choose a square grid of -50 to 50 as this is the dimensions of the plots generated):
+The compiled program is call electrostatics and is in the bin directory. Running the program generates the necessary data files and a gnuplot .plt file as specified in the config file used. It takes one config file as an argument. The program can be run for the different problems as shown below (example for problem 1).
 ```bash
 cd bin
-./electrostatics
-gnuplot ../scripts/plotProblemX.plt # Replace X with the problem number you have generated the data for
+./electrostatics ../cfg/problem1.cfg
+gnuplot p1plots.plt
 ```
 
-This will generate the plots as eps files called that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.
+This will generate the plots as eps files that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.

@@ -19,7 +19,7 @@ TESTOBJECTS := $(patsubst $(TESTSRCDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRC
 # NDEBUG flag avoids bounds checking for eigen vectors, uncomment once code is definitely stable
 CFLAGS := -std=c++11 -g3 -Wall -fopenmp -O3 # -DNDEBUG
 LIB := -fopenmp # -lOpenCL -L/usr/lib/x86_64-linux-gnu/libOpenCL.so
-TESTLIB := -lgtest -lgtest_main -pthread
+TESTLIB := -fopenmp -lgtest -lgtest_main -pthread
 INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/include # -I /usr/include/CL
 
 
