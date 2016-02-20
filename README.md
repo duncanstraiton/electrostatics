@@ -25,6 +25,163 @@ Contains the config files that specify the problems to solve.
 
 
 
+### Config file format
+
+Config files are saved with a .cfg extension and are in the cfg directory. Each line is a command, with the first word being the command name, and the following words being the arguments. Arguments should be seperated by a space and must not contain spaces themselves. All commands and arguments must be lowercase.
+
+#### Comments
+Any line starting with a # is a comment, and is ignored by the program.
+```
+# This is a comment
+```
+
+#### Defining a new unsolved system
+new systemName xMin xMax yMin yMax
+```
+# A new unsolved system called problem1 with grid size xMin=-300 xMax=300 yMin=-100 yMax=100
+new problem1 -300 300 -100 100
+```
+
+#### Adding boundary conditions to an unsolved system
+All position coordinates and grid sizes must be integers. Radiuses and potentials can be doubles.
+
+##### Points
+```
+point xPosition yPosition potential
+```
+
+##### Rings - not filled
+```
+ring centreX centreY radius potential 
+```
+
+##### Circles (/cylinders) - filled
+```
+circle centreX centreY radius potential
+```
+
+##### Lines
+```
+line x1 y1 x2 y2 potential
+```
+
+#### Plates
+Sets the potential for a plate at the specified edge of the system.
+```
+left potential
+right potential
+top potential
+bottom potential
+```
+
+##### Rectangle - not filled
+A rectangle with edges parallel to the edges of the system.
+```
+ractangle leftBoundary rightBoundary topBoundary bottomBoundary potential
+```
+
+#### Solving methods
+Solving an unsolved system does not change it, so it is easy to solve the same unsolved system many times with different methods.
+
+##### Biconjugate Gradient - Eigen
+Biconjugate Gradient method from Eigen library.
+```
+# Solves the unsolved system called unsolved storing the result in a new solved system called solved
+solveeigenbicon unsolved solved
+```
+
+##### SparseLU - Eigen
+Sparse LU method from Eigen library.
+```
+# Solves the unsolved system called unsolved storing the result in a new solved system called solved
+solveeigensparselu unsolved solved
+```
+
+##### Biconjugate Gradient - ViennaCL
+Biconjugate Gradient method from the ViennaCL library.
+```
+# Solves the unsolved system called unsolved storing the result in a new solved system called solved
+solveviennabicon unsolved solved
+```
+
+##### Iterative method
+An iterative method simmilar to that used for heat flow over time with a specified number of iterations.
+```
+# Solves the unsolved system called unsolved storing the result in a new solved system called solved with 1000 iterations
+solveiterative unsolved solved 1000
+```
+
+#### Analytical solutions
+Analytics solutions for the first and second problems are hard coded into the program.
+```
+# The analytical solution for problem 1, stored in a solved system called p1analytical with grid size as above and inner cylinder radius 20, outer ring radius 90, inner cylinder potential 0, outer ring potential 100
+analytical1 p1analytical -300 300 -100 100 20 90 0 100
+
+# As above for problem 2 with a left plate voltage of 50, right plate at -50 and cylinder radius 90 (always at 0V)
+analytical2 p2analytical -300 300 -100 100 50 -50 90
+```
+
+#### Saving results
+
+##### Saving the potential at every point for a solution
+Stored in a matrix like format that is easy to plot with gnuplot. The file will have the same name as the system.
+```
+savesolution solvedsystemname
+```
+
+##### Saving a comparison between two solved systems
+Saves the absolute difference between the two systems at each point to a matrix like format the same as for savesolution.
+```
+savecomparison systemnamea systemnameb outputfilename
+```
+
+##### Saving electric field
+Stored as a list of points of the form:
+x y dx dy
+The file has the same name as the system but appended with "field". Eg solvedsystemnamefield in the example below.
+```
+savefield solvedsystemname
+```
+
+#### Timing steps in the config files
+Any steps in the config files can be timed. Multiple timers can be running at one time. The elapsed total CPU time is printed to the standard output stream along with the timer name with the timer is stopped.
+```
+starttimer wholefiletimer
+DO STUFF
+starttimer solvetimer
+SOLVE THE SYSTEM HERE
+stoptimer solvetimer
+stoptimer wholefiletimer
+```
+
+#### Plotting results
+
+##### Opening a plot file
+Before plots can be selected, a plot file must be generated as follows:
+```
+# A plotfile with grid xMin=-300 xMax=300 yMin=-100 yMax=100 called plots.plt
+plotfile plots.plt -300 300 -100 100
+```
+
+##### Plain plot of system potentials / difference plot etc
+The system must be saved with savesolution first.
+```
+plot systemname
+```
+
+##### Plot with field arrows
+The system and field must be saved with savesolution and savefield first.
+``
+fieldplot systemname
+```
+
+##### Plot with equipotential lines
+The system must be saved with savesolution first.
+```
+contourplot systemname
+```
+
+
 ### Compiling and Running
 
 To compile and run the program you must have g++, make, ViennaCL and Eigen installed. Eigen is the library used to provide matrices. There are options to solve the matrices with either Eigen of ViennaCL.  To compile the unit tests you must install the Google Test framework. Gnuplot is needed to generate the .eps plots. The installation commands below should work on Debian based linux distributions such as Ubuntu, Mint etc. 
@@ -39,6 +196,25 @@ NOTE: Using the latest version of ViennaCL from their website caused problems, b
 ```bash
 sudo apt-get install libeigen3-dev libviennalcl-dev gnuplot
 ```
+
+##### Compiling
+In the root directory of the project run make -j. This will generate the object files in the build directory, and the output executable in the bin directory. To complie with multicore support run make openMP -j. The -j tells make to use multiple threads when compiling, which saves a lot of time.
+```bash
+make -j
+```
+
+##### Running the Program
+The compiled program is call electrostatics and is in the bin directory. Running the program generates the necessary data files and a gnuplot .plt file as specified in the config file used. It takes one config file as an argument. The program can be run for the different problems as shown below (example for problem 1).
+```bash
+cd bin
+./electrostatics ../cfg/problem1.cfg
+gnuplot p1plots.plt
+```
+
+This will generate the plots as eps files that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.
+
+
+### Compiling and running the unit tests
 
 ##### Installing Google Test
 ```
@@ -59,19 +235,3 @@ The tests can then be executed by running
 ```bash
 test/bin/testAll
 ```
-
-##### Compiling
-In the root directory of the project run make -j. This will generate the object files in the build directory, and the output executable in the bin directory. To complie with multicore support run make openMP -j. The -j tells make to use multiple threads when compiling, which saves a lot of time.
-```bash
-make -j
-```
-
-##### Running the Program
-The compiled program is call electrostatics and is in the bin directory. Running the program generates the necessary data files and a gnuplot .plt file as specified in the config file used. It takes one config file as an argument. The program can be run for the different problems as shown below (example for problem 1).
-```bash
-cd bin
-./electrostatics ../cfg/problem1.cfg
-gnuplot p1plots.plt
-```
-
-This will generate the plots as eps files that can then be opened with a program like gv. You will need gnuplot installed to generate the plots.
