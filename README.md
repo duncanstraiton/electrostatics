@@ -176,7 +176,7 @@ plot systemname
 ##### Plot with field arrows
 The system and field must be saved with savesolution and savefield first.
 ```
-fieldplot systemname
+fieldplot systemname arrowspacing
 ```
 
 ##### Plot with equipotential lines
