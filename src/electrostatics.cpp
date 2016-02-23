@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
         else if(splitLine[0] == "plotfile") {
             plotFile.open(splitLine[1].c_str());
             plotFile <<
-                "#!/#!/usr/bin/gnuplot -persist\n"
+                "#!/usr/bin/gnuplot -persist\n"
                 "\n"
                 "set style line 1 lt 1 lc rgb \"red\"\n"
                 "set palette defined ( 0 '#FFFFD9', 1 '#EDF8B1', 2 '#C7E9B4', 3 '#7FCDBB',\\\n"

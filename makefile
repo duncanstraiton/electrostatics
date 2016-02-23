@@ -17,8 +17,8 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 TESTSOURCES := $(shell find $(TESTSRCDIR) -type f -name *.$(SRCEXT))
 TESTOBJECTS := $(patsubst $(TESTSRCDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
 # NDEBUG flag avoids bounds checking for eigen vectors, uncomment once code is definitely stable
-CFLAGS := -std=c++11 -g3 -Wall -fopenmp -O3 # -DNDEBUG
-LIB := -fopenmp # -lOpenCL -L/usr/lib/x86_64-linux-gnu/libOpenCL.so
+CFLAGS := -std=c++11 -g3 -Wall -O3 # -DNDEBUG
+LIB := # -lOpenCL -L/usr/lib/x86_64-linux-gnu/libOpenCL.so
 TESTLIB := -fopenmp -lgtest -lgtest_main -pthread
 INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/include # -I /usr/include/CL
 
@@ -32,8 +32,10 @@ INC := -I include  -I /usr/include/eigen3 -I /usr/include/gtest -I $(HOME)/inclu
 all: $(TARGET)
 
 # Compile with support for openMP multi-threading
-openMP: CFLAGS += -DVIENNACL_WITH_OPENMP
-openMP: $(TARGET)
+multicore:
+	CFLAGS += -DVIENNACL_WITH_OPENMP -fopenmp
+	LIB += -fopenmp
+multicore: $(TARGET)
 
 
 
