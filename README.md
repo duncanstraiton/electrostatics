@@ -198,7 +198,7 @@ sudo apt-get install g++ make
 ##### Installing Eigen, ViennaCL and Gnuplot
 NOTE: Using the latest version of ViennaCL from their website caused problems, but the version installed by apt-get seems to work fine!
 ```bash
-sudo apt-get install libeigen3-dev libviennalcl-dev gnuplot
+sudo apt-get install libeigen3-dev libviennacl-dev gnuplot
 ```
 
 ##### Compiling
